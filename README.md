@@ -1,16 +1,15 @@
-# reusebook
+# Reusebook
+*REUSE BOOK 📚 Reuse Book is interactive platform for connecting two users (specially for students) for selling and purchasing old books.It is very useful for one who want to buy books at low prices and one who want to sell their old books at half prices .The old books shopkeeper also include in this app.
 
-A new Flutter project.
+ Features 
+1.Book will be available in categorised format so one can easily find out their required book.
+2.You can check the condition of book through pictures available on the app.
+3.User friendly -One can easily understand the working of this app.
+   And there is one option also to see how it works .
 
-## Getting Started
+ Benefits 
+1. Environmental Impact : Reduces waste and the need for new resources, promoting sustainability.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. Cost-Effective : Saves money compared to buying new books
+3. Sustainable Practices : Encourages a culture of reuse, aligning with sustainable living principles
+Reusing books not only benefits individuals but also contributes positively to the community and the environment
