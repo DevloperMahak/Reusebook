@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:reusebook/login.dart';
+import 'package:reusebook/services/Register_Api.dart';
 import 'package:reusebook/uihelper.dart';
 
 class RegisterPage extends StatefulWidget{
@@ -30,17 +31,28 @@ class RegisterPageState extends State<RegisterPage>{
     if(email=="" && password==""){
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
     }
-    else{
-      UserCredential? usercredential;
-      try{
-        usercredential=await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value){
-            Navigator.push(context,MaterialPageRoute(builder:(context)=>LoginPage()));
-        });
-            }
-            on FirebaseAuthException catch(ex){
-          return UiHelper.CustomAlertBox(context, ex.code.toString());
-        }
-      }
+    else {
+      var data = {
+        "FirstName": FirstName.text,
+        "LastName": LastName.text,
+        "Gender": Gender.text,
+        "DOB": DOB.text,
+        "BirthPlace": BirthPlace.text,
+        "PhNo": PhNo.text,
+        "WhatsappNo": WhatsappNo.text,
+        "CollegeName": CollegeName.text,
+        "CollegeState": CollegeState.text,
+        "Branch": Branch.text,
+        "Degree": Degree.text,
+        "PassYear": PassYear.text,
+        "EmailText": EmailText.text,
+        "PasswordNum": PasswordNum.text,
+        "ConfirmPasswordNum": ConfirmPasswordNum.text,
+      };
+      Register_Api.addUser(data);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
     }
 
   @override
