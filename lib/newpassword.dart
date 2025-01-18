@@ -103,7 +103,8 @@ Widget build(BuildContext context) {
                                   ])
                           )),
 
-                      UiHelper.CustomButton((){}, "Reset Passsword") ,
+                      UiHelper.CustomButton((){Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => LoginPage()));}, "Reset Passsword") ,
                     ]),
 
                 ))])

@@ -22,7 +22,10 @@ class LoginPageState extends State<LoginPage> {
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
     }
     else{
-      UserCredential?usercredential;
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context)=>LanguagePage()));
+
+      /*UserCredential? usercredential;
       try {
         usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: email, password: password).then((value){
@@ -32,7 +35,7 @@ class LoginPageState extends State<LoginPage> {
       }
       on FirebaseAuthException catch(ex){
         return UiHelper.CustomAlertBox(context, ex.code.toString());
-      }
+      }*/
     }
   }
 

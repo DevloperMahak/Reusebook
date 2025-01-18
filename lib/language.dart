@@ -80,7 +80,8 @@ class LanguagePage extends StatelessWidget {
                               )),
                         )),
 
-                        UiHelper.CustomButton((){}, "Confirm") ,
+                        UiHelper.CustomButton((){Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => homePage()));}, "Confirm") ,
                       ]
                     )
                   ))

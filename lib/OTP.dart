@@ -76,7 +76,8 @@ class OTP extends StatelessWidget {
                                     ])
                             )),
 
-                       UiHelper.CustomButton((){}, "Send OTP") ,
+                       UiHelper.CustomButton((){Navigator.push(
+                           context, MaterialPageRoute(builder: (context) => confirmOTP()));}, "Send OTP") ,
 
                      ])
                    )

@@ -76,7 +76,8 @@ class confirmOTP extends StatelessWidget {
                             ])
                           )),
 
-                        UiHelper.CustomButton((){}, "Confirm") ,
+                        UiHelper.CustomButton((){Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => newpasswordPage()));}, "Confirm") ,
                       ]),
 
                   ))])

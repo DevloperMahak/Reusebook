@@ -30,9 +30,12 @@ class RegisterPageState extends State<RegisterPage>{
   bool _ObscureText1 = true;
   bool _ObscureText2 = true;
 
-  Register(String email,String password, String confirmpassword)async{
-    if(email=="" || password=="" || confirmpassword==""){
+  Register(String firstname,String lastname,String gender, String email,String password, String confirmpassword)async{
+    if(firstname=="" || lastname==""|| gender=="" || email=="" || password=="" || confirmpassword==""){
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
+    }
+    else if(password != confirmpassword){
+      UiHelper.CustomAlertBox(context, "Your Confirmpassword is not same a password");
     }
     else {
       var data = {
@@ -271,7 +274,7 @@ class RegisterPageState extends State<RegisterPage>{
 
 
                             UiHelper.CustomButton((){
-                              Register(EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString());
+                              Register(FirstName.text.toString(),LastName.text.toString(),Gender.text.toString(),EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString());
                             }, "Register") ,
                         ]),
                   ),
