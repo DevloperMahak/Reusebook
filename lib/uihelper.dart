@@ -20,7 +20,7 @@ class UiHelper{
     )
     ));
   }
-    static CustomTextField2(TextEditingController controller,String text,IconData iconData1,IconData iconData2,bool toHide){
+    static CustomTextField2(TextEditingController controller,String text,IconData iconData1,iconData2,bool toHide){
       return  Center(
         child:Container(
         margin: const EdgeInsets.only(top:5,bottom: 10),
@@ -32,7 +32,7 @@ class UiHelper{
         decoration: InputDecoration(
           hintText: text,
             prefixIcon: Icon(iconData1,color:Color(0xffFFB330) ,),
-            suffixIcon: Icon(iconData2,color:Color(0xff3D4652) ,),
+            suffixIcon: Icon(iconData2,color:Color(0xffFFB330),),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xffFFB330))),
         )

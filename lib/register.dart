@@ -11,24 +11,27 @@ class RegisterPage extends StatefulWidget{
 }
 
 class RegisterPageState extends State<RegisterPage>{
-  TextEditingController FirstName=TextEditingController();
-  TextEditingController LastName=TextEditingController();
-  TextEditingController Gender=TextEditingController();
-  TextEditingController DOB=TextEditingController();
-  TextEditingController BirthPlace=TextEditingController();
-  TextEditingController PhNo=TextEditingController();
-  TextEditingController WhatsappNo=TextEditingController();
-  TextEditingController CollegeName=TextEditingController();
-  TextEditingController CollegeState=TextEditingController();
-  TextEditingController Branch=TextEditingController();
-  TextEditingController Degree=TextEditingController();
-  TextEditingController PassYear=TextEditingController();
-  TextEditingController EmailText=TextEditingController();
-  TextEditingController PasswordNum=TextEditingController();
-  TextEditingController ConfirmPasswordNum=TextEditingController();
+  var FirstName=TextEditingController();
+  var LastName=TextEditingController();
+  var Gender=TextEditingController();
+  var DOB=TextEditingController();
+  var BirthPlace=TextEditingController();
+  var PhNo=TextEditingController();
+  var WhatsappNo=TextEditingController();
+  var CollegeName=TextEditingController();
+  var CollegeState=TextEditingController();
+  var Branch=TextEditingController();
+  var Degree=TextEditingController();
+  var PassYear=TextEditingController();
+  var EmailText=TextEditingController();
+  var PasswordNum=TextEditingController();
+  var ConfirmPasswordNum=TextEditingController();
 
-  Register(String email,String password)async{
-    if(email=="" && password==""){
+  bool _ObscureText1 = true;
+  bool _ObscureText2 = true;
+
+  Register(String email,String password, String confirmpassword)async{
+    if(email=="" || password=="" || confirmpassword==""){
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
     }
     else {
@@ -214,17 +217,61 @@ class RegisterPageState extends State<RegisterPage>{
                             margin: const EdgeInsets.only(left:23,top: 15 ),
                             child: const Text("Password",style: TextStyle(fontSize: 16,),),),
 
-                           UiHelper.CustomTextField2(PasswordNum, "********",Icons.lock,Icons.remove_red_eye,true),
+                          Center(
+                              child:Container(
+                                  margin: const EdgeInsets.only(top:5,bottom: 10),
+                                  height: 48,
+                                  width: 366,
+                                  child:TextField(
+                                      controller: PasswordNum,
+                                      obscureText:_ObscureText1,
+                                      decoration: InputDecoration(
+                                        hintText: "********",
+                                        prefixIcon: Icon(Icons.lock,color:Color(0xffFFB330) ,),
+                                        suffixIcon: IconButton(
+                                            onPressed:(){
+                                              setState(() {
+                                                _ObscureText1 = !_ObscureText1;
+                                              });
+                                            },
+                                            icon: Icon(_ObscureText1 ? Icons.visibility_off : Icons.visibility)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Color(0xffFFB330))),
+                                      )
+                                  )
+                              )),
 
                           Container(
                             margin: const EdgeInsets.only(left:23 ),
                             child: const Text("Confirm Password",style: TextStyle(fontSize: 16,),),),
 
-                           UiHelper.CustomTextField2(ConfirmPasswordNum, "********",Icons.lock,Icons.remove_red_eye,true),
+                          Center(
+                              child:Container(
+                                  margin: const EdgeInsets.only(top:5,bottom: 10),
+                                  height: 48,
+                                  width: 366,
+                                  child:TextField(
+                                      controller: ConfirmPasswordNum,
+                                      obscureText:_ObscureText2,
+                                      decoration: InputDecoration(
+                                        hintText: "********",
+                                        prefixIcon: Icon(Icons.lock,color:Color(0xffFFB330) ,),
+                                        suffixIcon: IconButton(
+                                            onPressed:(){
+                                              setState(() {
+                                                _ObscureText2 = !_ObscureText2;
+                                              });
+                                            },
+                                            icon: Icon(_ObscureText2 ? Icons.visibility_off : Icons.visibility)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Color(0xffFFB330))),
+                                      )
+                                  )
+                              )),
 
 
                             UiHelper.CustomButton((){
-                              Register(EmailText.text.toString(),PasswordNum.text.toString());
+                              Register(EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString());
                             }, "Register") ,
                         ]),
                   ),

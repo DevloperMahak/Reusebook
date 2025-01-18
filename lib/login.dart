@@ -15,6 +15,8 @@ class LoginPageState extends State<LoginPage> {
   TextEditingController EmailText=TextEditingController();
   TextEditingController PasswordNum=TextEditingController();
 
+  bool _ObscureText = true;
+
   Login(String email,String password)async{
     if(email=="" && password==""){
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
@@ -103,7 +105,29 @@ class LoginPageState extends State<LoginPage> {
                   alignment: Alignment.centerLeft,
                 child:Text("Password",style: TextStyle(fontSize: 16,),),)),
 
-              UiHelper.CustomTextField2(PasswordNum, "********",Icons.lock,Icons.remove_red_eye,true) ,
+    Center(
+    child:Container(
+    margin: const EdgeInsets.only(top:5,bottom: 10),
+    height: 48,
+    width: 366,
+    child:TextField(
+    controller: PasswordNum,
+    obscureText:_ObscureText,
+    decoration: InputDecoration(
+    hintText: "********",
+    prefixIcon: Icon(Icons.lock,color:Color(0xffFFB330) ,),
+    suffixIcon: IconButton(
+    onPressed:(){
+     setState(() {
+       _ObscureText = !_ObscureText;
+     });
+    },
+    icon: Icon(_ObscureText ? Icons.visibility_off : Icons.visibility)),
+    enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Color(0xffFFB330))),
+    )
+    )
+    )),
 
     Align(
     alignment: Alignment.centerRight,
