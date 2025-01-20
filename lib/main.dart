@@ -2,17 +2,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:reusebook/splash_screen.dart';
 import 'package:flutter/widgets.dart';
-import '';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp( MyApp(token: prefs.getString('token'),));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  final token;
+  const MyApp({
+    @required this.token,
+    Key? key,
+}): super(key : key);
 
   // This widget is the root of your application.
   @override
