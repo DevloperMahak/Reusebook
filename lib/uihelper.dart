@@ -16,6 +16,8 @@ class UiHelper{
           prefixIcon: Icon(iconData,color:Color(0xffFFB330) ,),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color(0xffFFB330))),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xffFFB330))),
         )
     )
     ));
@@ -35,6 +37,8 @@ class UiHelper{
             suffixIcon: Icon(iconData2,color:Color(0xffFFB330),),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xffFFB330))),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xffFFB330))),
         )
     )
     ));
@@ -51,6 +55,8 @@ class UiHelper{
         decoration: InputDecoration(
           hintText: text,
           enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xffFFB330))),
+          focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color(0xffFFB330))),
         )
     )
@@ -69,6 +75,8 @@ class UiHelper{
                   hintText: text,
                   suffixIcon: Icon(iconData,color:Color(0xffFFB330) ,),
                   enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffFFB330))),
+                  focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0xffFFB330))),
                 )
             )
