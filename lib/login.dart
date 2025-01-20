@@ -153,6 +153,8 @@ class LoginPageState extends State<LoginPage> {
     icon: Icon(_ObscureText ? Icons.visibility_off : Icons.visibility)),
     enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(color: Color(0xffFFB330))),
+      focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xffFFB330))),
     )
     )
     )),
