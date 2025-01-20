@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:reusebook/login.dart';
-import 'package:reusebook/services/Register_Api.dart';
 import 'package:reusebook/uihelper.dart';
+import 'package:http/http.dart' as http;
+import 'url.dart';
 
 class RegisterPage extends StatefulWidget{
   const RegisterPage({super.key});
@@ -30,8 +31,10 @@ class RegisterPageState extends State<RegisterPage>{
   bool _ObscureText1 = true;
   bool _ObscureText2 = true;
 
-  Register(String firstname,String lastname,String gender, String email,String password, String confirmpassword)async{
-    if(firstname=="" || lastname==""|| gender=="" || email=="" || password=="" || confirmpassword==""){
+
+
+  Register(String firstname,String lastname,String gender,String dob,String birthplace,String phno,String whatsappno, String email,String password, String confirmpassword)async{
+    if(firstname=="" || lastname==""|| gender=="" || dob=="" || birthplace=="" || phno=="" || whatsappno=="" || email=="" || password=="" || confirmpassword==""){
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
     }
     else if(password != confirmpassword){
@@ -55,7 +58,18 @@ class RegisterPageState extends State<RegisterPage>{
         "PasswordNum": PasswordNum.text,
         "ConfirmPasswordNum": ConfirmPasswordNum.text,
       };
-      Register_Api.addUser(data);
+
+     final response = await http.post(Uri.parse(registration),
+         headers:{"Content-Type":"application/json"},
+         body:jsonEncode(data)
+         );
+      if (response.statusCode == 200) {
+        print('Registration successful');
+      } else {
+        print('Registration failed');
+      }
+     print(response);
+
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
     }
@@ -274,7 +288,7 @@ class RegisterPageState extends State<RegisterPage>{
 
 
                             UiHelper.CustomButton((){
-                              Register(FirstName.text.toString(),LastName.text.toString(),Gender.text.toString(),EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString());
+                              Register(FirstName.text.toString(),LastName.text.toString(),Gender.text.toString(),DOB.text.toString(),BirthPlace.text.toString(),PhNo.text.toString(),WhatsappNo.text.toString(),EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString());
                             }, "Register") ,
                         ]),
                   ),
