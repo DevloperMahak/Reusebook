@@ -1,8 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:reusebook/OTP.dart';
 import 'package:reusebook/language.dart';
 import 'package:reusebook/register.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'url.dart';
 import 'package:reusebook/uihelper.dart';
 
 class LoginPage extends StatefulWidget{
@@ -14,28 +17,50 @@ class LoginPage extends StatefulWidget{
 class LoginPageState extends State<LoginPage> {
   TextEditingController EmailText=TextEditingController();
   TextEditingController PasswordNum=TextEditingController();
+  late SharedPreferences prefs;
+
+  @override
+  void initState(){
+    // TODO: implement initState
+    super.initState();
+    initSharedPref();
+  }
+
+  void initSharedPref()async{
+    prefs = await SharedPreferences.getInstance();
+  }
 
   bool _ObscureText = true;
 
+
   Login(String email,String password)async{
-    if(email=="" && password==""){
+    if(email=="" || password==""){
       UiHelper.CustomAlertBox(context, "Enter Required Fields");
     }
     else{
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context)=>LanguagePage()));
+      var data = {
+        "EmailText": EmailText.text,
+        "PasswordNum": PasswordNum.text,
+      };
+      var response = await http.post(Uri.parse(login),
+          headers:{"Content-Type":"application/json"},
+          body:jsonEncode(data)
+      );
+      var jsonResponse = jsonDecode(response.body);
 
-      /*UserCredential? usercredential;
-      try {
-        usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: email, password: password).then((value){
-          Navigator.push(context,
-            MaterialPageRoute(builder: (context)=>LanguagePage()));
-            });
+      // Check if 'status' exists and is a boolean
+      bool status = jsonResponse['status'] ?? false;  // Default to false if null or missing
+
+      if (status) {
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LanguagePage(token: myToken,)));
+        print('Registration successful');
+      } else {
+        UiHelper.CustomAlertBox(context, "Something went wrong.");
       }
-      on FirebaseAuthException catch(ex){
-        return UiHelper.CustomAlertBox(context, ex.code.toString());
-      }*/
+
     }
   }
 
