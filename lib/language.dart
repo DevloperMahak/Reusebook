@@ -2,8 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:reusebook/home.dart';
 import 'package:reusebook/newpassword.dart';
 import 'package:reusebook/uihelper.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class LanguagePage extends StatelessWidget {
+class LanguagePage extends StatefulWidget{
+  final token;
+  const LanguagePage({@required this.token,Key? key}) : super(key: key);
+
+  @override
+  State<LanguagePage>createState()=>LanguagePageState();
+}
+
+class LanguagePageState extends State<LanguagePage> {
+
+  late String EmailText;
+
+  @override
+  void initState() {
+    //TODO: implement initState
+    super.initState();
+    Map<String, dynamic>jwtDecodedToken = JwtDecoder.decode(widget.token);
+    EmailText = jwtDecodedToken['EmailText'];
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
