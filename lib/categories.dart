@@ -1,15 +1,32 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
-
+import 'package:reusebook/uihelper.dart';
+import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'orders.dart';
 
-class categoriesPage extends StatelessWidget {
+class categoriesPage extends StatefulWidget {
+  const categoriesPage({super.key});
+  @override
+  State<categoriesPage>createState()=>categoriesPageState();
+}
+
+class categoriesPageState extends State<categoriesPage>{
+
+
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
+    final screenheight=MediaQuery.of(context).size.height;
+
+
+
+    const bookname = ["Maths","Physics","Chemistry","Biology","Computer","History","Geography","DSA","CBNST"];
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -36,7 +53,7 @@ class categoriesPage extends StatelessWidget {
                 )),
           ),
           Container(
-            margin: EdgeInsets.only(left: 30),
+            margin: EdgeInsets.only(left: 20,right: 15),
             child: Icon(Icons.favorite,size: 28,color: Color(0xff3D4652),),
           ),
         ],
@@ -51,37 +68,177 @@ class categoriesPage extends StatelessWidget {
         ),
       ),
       body:
-          Stack(
+           Stack(
               children: [
-                Center(
+                // Horizontal filter bar
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child:Container(
+                    width: 780,
+                    height:60,
+                    color: Color(0xffF2F0F0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          height: 40,
+                          width: 100,
+                          child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Center(
+                                    child:Text("Sort ",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400))),
+                                Icon(Icons.sort_outlined,size: 30,)
+                              ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),),
+                              border:Border.all(
+                                  color: Color(0xff3D4652)),
+                              color: Colors.white
+                          ),),
+                        Container(
+                          height: 40,
+                          width: 100,
+                          child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [Center(
+                                  child:Text("filter ",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400))),
+                                Icon(Icons.filter_alt_outlined,size: 30,)
+                              ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),),
+                              border:Border.all(
+                                  color: Color(0xff3D4652)),
+                              color: Colors.white
+                          ),),
+                        Container(
+                          height: 40,
+                          width: 100,
+                          child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [Center(
+                                  child:Text("Type",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400))),
+                                Icon(Icons.keyboard_arrow_down_outlined,size: 30,)
+                              ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),),
+                              border:Border.all(
+                                  color: Color(0xff3D4652)),
+                              color: Colors.white
+                          ),),
+                        Container(
+                          height: 40,
+                          width: 130,
+                          child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [Center(
+                                  child:Text("Category",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400))),
+                                Icon(Icons.keyboard_arrow_down_outlined,size: 30,)
+                              ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),),
+                              border:Border.all(
+                                  color: Color(0xff3D4652)),
+                              color: Colors.white
+                          ),),
+                        Container(
+                          height: 40,
+                          width: 120,
+                          child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [Center(
+                                  child:Text("Charges",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400))),
+                                Icon(Icons.keyboard_arrow_down_outlined,size: 30,)
+                              ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),),
+                              border:Border.all(
+                                  color: Color(0xff3D4652)),
+                              color: Colors.white
+                          ),),
+                        Container(
+                          height: 40,
+                          width: 190,
+                          child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [Center(
+                                  child:Text("Customer Ratings",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400))),
+                                Icon(Icons.keyboard_arrow_down_outlined,size: 30,)
+                              ]),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),),
+                              border:Border.all(
+                                  color: Color(0xff3D4652)),
+                              color: Colors.white
+                          ),)
+                      ],
+                    ),
+                  ),
+
+                ),
+                // Grid of books
+              Center(
+            child:Container(
+                margin: EdgeInsets.only(top:70,right: 10,left:10 ),
                     child: Container(
-                      margin: EdgeInsets.only(top: 10),
                       width: screenwidth,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child:ListView.separated(
-                        itemBuilder: (context,Index){
-                          return ListTile(
-                            leading: Container(
-                                margin: EdgeInsets.only(right: 50),
-                                height: 100,
-                                width: 100,
-                                child:Image.asset('assets/images/book.png')),
-                            title: Text("Book Name",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),),
-                            subtitle: Text("Writer Name",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
-                          );
-                        },
-                        separatorBuilder: (context,Index){
-                          return Divider(
-                            height: 20,
-                            thickness: 3,
-                            color: Color(0xffD9D9D9),
-                          );
-                        },
-                        itemCount: 15,
-                      ),
-                    )),
+                      child:GridView.builder(itemBuilder: (context,index){
+       return Container(
+        //height:400 ,
+        width: 180,
+        child: Column(
+          children: [
+            Container(
+                margin: const EdgeInsets.only(top:10),
+                height: 60,
+                width: 60,
+                child:Image.asset('assets/images/book.png')),
+            Container(
+                margin: const EdgeInsets.only(top:10),
+              child:Text(bookname[index],style: TextStyle(fontSize:18,fontWeight: FontWeight.w500),)),
+           Container(
+                margin: const EdgeInsets.only(top:2),
+                child:Text("By Author name ",style: TextStyle(fontSize:15,fontWeight: FontWeight.w400),)),
+                        Center(
+                        child:Container(
+                        margin: const EdgeInsets.only(top:5,),
+                        height: 30,
+                        width: 150,
+                        child: ElevatedButton(onPressed: (){},
+                        style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xffFFB330),
+                        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)
+                        )
+                        ),
+                        child: Text("Add to Cart")),
+                        )
+                        ),
+            Container(
+              alignment: Alignment.bottomRight,
+                margin: const EdgeInsets.only(top:5,right: 10),
+                child:Text("View more > ",style: TextStyle(fontSize:10,fontWeight: FontWeight.w400),)),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border:Border.all(
+              color: Color(0xffFFB330)
+          ) ,
+        ),
+      );},itemCount: bookname.length,gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 10,mainAxisSpacing: 10),
+                        ),
+
+                        ))),
+                // Bottom Navigation Bar
                 Positioned(
                     bottom: 0,
                     child: Container(

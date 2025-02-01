@@ -33,14 +33,33 @@ class RegisterPageState extends State<RegisterPage>{
 
 
 
-  Register(String firstname,String lastname,String gender,String dob,String birthplace,String phno,String whatsappno, String email,String password, String confirmpassword)async{
-    if(firstname=="" || lastname==""|| gender=="" || dob=="" || birthplace=="" || phno=="" || whatsappno=="" || email=="" || password=="" || confirmpassword==""){
-      UiHelper.CustomAlertBox(context, "Enter Required Fields");
+  Register(String firstname,String lastname,String gender,String dob,String birthplace,String phno,String whatsappno, String email,String password, String confirmpassword)async {
+    if (firstname == "" || lastname == "" || gender == "" || dob == "" ||
+        birthplace == "" || phno == "" || whatsappno == "" || email == "" ||
+        password == "" || confirmpassword == "") {
+      UiHelper.CustomAlertBox(
+          context, "Enter Required Fields"); // Check if any field is empty
     }
-    else if(password != confirmpassword){
-      UiHelper.CustomAlertBox(context, "Your Confirmpassword is not same a password");
+    if (password != confirmpassword) {
+      UiHelper.CustomAlertBox(context,
+          "Your Confirmpassword is not same as password"); // Check if passwords match
+      return;
     }
-    else {
+
+    // Check if email is valid
+    if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(
+        EmailText.text)) {
+      UiHelper.CustomAlertBox(context, "Please enter a valid email address");
+      return;
+    }
+
+    // Check if phone numbers are valid (basic length check or pattern)
+    if (PhNo.text.length != 10 || WhatsappNo.text.length != 10) {
+      UiHelper.CustomAlertBox(context, "Please enter a valid phone number");
+      return;
+    }
+
+// Prepare data for registration API request
       var data = {
         "FirstName": FirstName.text,
         "LastName": LastName.text,
@@ -59,21 +78,32 @@ class RegisterPageState extends State<RegisterPage>{
         "ConfirmPasswordNum": ConfirmPasswordNum.text,
       };
 
-     final response = await http.post(Uri.parse(registration),
-         headers:{"Content-Type":"application/json"},
-         body:jsonEncode(data)
-         );
+      try {
+      // Send POST request to registration endpoint
+      final response = await http.post(Uri.parse(registration),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data)
+      );
+
+      // Check for successful registration response
       if (response.statusCode == 200) {
         print('Registration successful');
+        print(response);
+
+        // You could navigate to the login page or show a success message
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
       } else {
         print('Registration failed');
+        UiHelper.CustomAlertBox(
+            context, "Registration failed, please try again");
       }
-     print(response);
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
-    }
-    }
+    }catch(e){
+        // Catch any errors during the API call
+        print('Error during registration: $e');
+        UiHelper.CustomAlertBox(context, "An error occurred, please try again later");
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +188,7 @@ class RegisterPageState extends State<RegisterPage>{
               margin: const EdgeInsets.only(left:23 ),
               child: const Text("Birth Place",style: TextStyle(fontSize: 16,),),),
 
-             UiHelper.CustomTextField1(BirthPlace, "Select State",Icons.arrow_drop_down , false),
+             UiHelper.CustomTextField4(BirthPlace, "Select State",Icons.arrow_drop_down , false),
 
             Container(
               child: Column(

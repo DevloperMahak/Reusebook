@@ -8,7 +8,6 @@ import 'login.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await Firebase.initializeApp();
   runApp( MyApp(token: prefs.getString('token'),));
 }
 

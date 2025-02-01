@@ -50,6 +50,7 @@ class LanguagePageState extends State<LanguagePage> {
                     children: [
                       Text("Please,help us to know your",style: TextStyle(fontSize: 22,),),
                       Text("preferred language.",style: TextStyle(fontSize: 22,),),
+                      Text(EmailText),
                       ])
                   ))
                 ])),

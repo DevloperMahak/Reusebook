@@ -31,7 +31,7 @@ class sellPage extends StatelessWidget {
           children: [
             SingleChildScrollView(
       child:Container(
-        height:1400 ,
+        height:1450 ,
       child:Column(
               children:[
                 Center(

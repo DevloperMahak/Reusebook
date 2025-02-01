@@ -42,25 +42,37 @@ class LoginPageState extends State<LoginPage> {
         "EmailText": EmailText.text,
         "PasswordNum": PasswordNum.text,
       };
-      var response = await http.post(Uri.parse(login),
-          headers:{"Content-Type":"application/json"},
-          body:jsonEncode(data)
-      );
-      var jsonResponse = jsonDecode(response.body);
+      try {
+        var response = await http.post(Uri.parse(login),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(data)
+        );
+        if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
 
-      // Check if 'status' exists and is a boolean
-      bool status = jsonResponse['status'] ?? false;  // Default to false if null or missing
+        // Check if 'status' exists and is a boolean
+        bool status = jsonResponse['status'] ??
+            false; // Default to false if null or missing
 
-      if (status) {
-        var myToken = jsonResponse['token'];
-        prefs.setString('token', myToken);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LanguagePage(token: myToken,)));
-        print('Registration successful');
-      } else {
-        UiHelper.CustomAlertBox(context, "Something went wrong.");
+        if (status) {
+          var myToken = jsonResponse['token'];
+          prefs.setString('token', myToken);
+          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          sharedPreferences.setString('email', EmailText.text);
+          Navigator.push(
+              context, MaterialPageRoute(
+              builder: (context) => LanguagePage(token: myToken,)));
+          print('login successful');
+        } else {
+          UiHelper.CustomAlertBox(context, "Something went wrong.");
+        }
+      }else {
+    UiHelper.CustomAlertBox(context, "Invalid Email Or Password.");
+    }
+      }catch (e) {
+        print("Error occurred: $e");
+        UiHelper.CustomAlertBox(context, "Server error, try again later.");
       }
-
     }
   }
 
@@ -192,6 +204,10 @@ class LoginPageState extends State<LoginPage> {
                   width: 300,
                   child:OutlinedButton(
                      style:  OutlinedButton.styleFrom(
+                       side: BorderSide(
+                         color: Color(0xffFFB330),
+                           width: 1.0
+                       ),
                         foregroundColor:  Color(0xffFFB330),
                        shape: RoundedRectangleBorder(
                            borderRadius: BorderRadius.circular(5)

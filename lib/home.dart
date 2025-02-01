@@ -6,6 +6,7 @@ import 'package:reusebook/navbar.dart';
 import 'package:reusebook/orders.dart';
 import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
+import 'package:reusebook/splash_screen.dart';
 
 import 'favourites.dart';
 import 'notifications.dart';
@@ -92,6 +93,7 @@ class homePage extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
+                                  Text('$finalEmail'),
                                   Container(
                                     width: 360,
                                     height: 55,

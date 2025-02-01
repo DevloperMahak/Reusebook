@@ -1,13 +1,74 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:reusebook/password.dart';
+import 'package:reusebook/services/API_Service.dart';
 import 'package:reusebook/uihelper.dart';
+import 'package:http/http.dart' as http;
+import 'url.dart';
 
-class OTP extends StatelessWidget {
+class OTP extends StatefulWidget {
+  const OTP({super.key});
+  @override
+  State<OTP>createState()=>OTPPage();
+}
+
+class OTPPage extends State<OTP> {
+  bool isAPICallProcess = false;
+  TextEditingController EmailText=TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
     final screenheight=MediaQuery.of(context).size.height;
-    return Scaffold(
+
+    EmailOTP(String email)async{
+      if(email==""){
+        UiHelper.CustomAlertBox(context, "Please enter a valid email");
+      }
+      else{
+        /*setState(() {
+          isAPICallProcess = true;
+        });
+        APIService.otpLogin(EmailText.text.toString()).then((response)async{
+          setState(() {
+            isAPICallProcess = false;
+          });
+          print(response.messsage);
+          print(response.data);
+
+          if(response.data != null) {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context)=>confirmOTP(
+                otpHash: response.data,
+              EmailText: EmailText.text.toString(),
+            ),
+                ),
+          (route)=>false,);
+          }
+
+        });
+      }*/
+        var data = {
+          "EmailText": EmailText.text,
+        };
+        var response = await http.post(Uri.parse(sendOTP),
+            headers:{"Content-Type":"application/json"},
+            body:jsonEncode(data)
+        );
+        if (response.statusCode == 200) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => confirmOTP()));
+          print( "OTP sent to your email.");
+        } else {
+          UiHelper.CustomAlertBox(context, "Failed to send OTP.");
+            print("Failed to send OTP.");
+        }
+      }
+    }
+
+    return SafeArea(
+      child :Scaffold(
         body: Stack(
             children: [
               Container(
@@ -51,21 +112,7 @@ class OTP extends StatelessWidget {
                             child :Center(
                               child:Text("Enter Email Address*",style: TextStyle(fontSize: 16,),),)
                         ),
-                        Center(
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              height: 48,
-                              width: 366,
-                              child: const TextField(
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.email,color: Color(0xffFFB330),size: 20,),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Color(0xffFFB330))
-                                      ),
-                                      hintText: "youremail@gmail.com"
-                                  )),
-                            )),
+                        UiHelper.CustomTextField1(EmailText, "youremail@gmail.com",Icons.email, false) ,
                         Container(
                             margin: const EdgeInsets.only(top:30),
                             child :Center(
@@ -76,13 +123,13 @@ class OTP extends StatelessWidget {
                                     ])
                             )),
 
-                       UiHelper.CustomButton((){Navigator.push(
-                           context, MaterialPageRoute(builder: (context) => confirmOTP()));}, "Send OTP") ,
+                       UiHelper.CustomButton((){EmailOTP(EmailText.text.toString());}, "Send OTP") ,
 
                      ])
                    )
                 )
            ])
-       );
+       )
+    );
   }
 }
