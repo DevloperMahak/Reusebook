@@ -1,7 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:reusebook/checkuser.dart';
+import 'package:reusebook/home.dart';
 import 'package:reusebook/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+String? finalEmail;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,15 +16,25 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenPage extends State<SplashScreen> {
   @override
   void initState(){
-    super.initState();
-
-    Timer(Duration(seconds: 5),(){
-      Navigator.pushReplacement(
-          context,
-      MaterialPageRoute(
-          builder: (context)=>LoginPage()
-      ));
+    getValidationData().whenComplete(()async{
+      Timer(Duration(seconds: 5),(){
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context)=>(finalEmail == null ? LoginPage(): homePage())
+            ));
+      });
     });
+    super.initState();
+  }
+
+  Future getValidationData()async{
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var obtainedEmail = sharedPreferences.getString('email');
+    setState(() {
+      finalEmail = obtainedEmail;
+    });
+    print(finalEmail);
   }
 
   @override
