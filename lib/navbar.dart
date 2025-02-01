@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reusebook/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Navbar extends StatelessWidget {
   @override
@@ -122,7 +123,9 @@ class Navbar extends StatelessWidget {
                       foregroundColor: Colors.white,
                       backgroundColor: Color(0xffFFB330),
                     ),
-                    onPressed: () {
+                    onPressed: () async{
+                      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                      sharedPreferences.remove('email');
                       Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context)=>LoginPage(),
