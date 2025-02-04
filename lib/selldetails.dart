@@ -41,6 +41,17 @@ class selldetailsState extends State<selldetails>{
     });
   }
 
+  Future takeCameraImage1()async{
+    final pickedFile = await picker1.pickImage(source:ImageSource.camera,imageQuality: 80);
+    setState(() {
+      if(pickedFile!=null){
+        _image1 = File(pickedFile.path);
+      }else{
+        print("no image picked");
+      }
+    });
+  }
+
   File? _image2;
   final picker2 = ImagePicker();
 
@@ -55,37 +66,53 @@ class selldetailsState extends State<selldetails>{
     });
   }
 
+  Future takeCameraImage2()async{
+    final pickedFile = await picker1.pickImage(source:ImageSource.camera,imageQuality: 80);
+    setState(() {
+      if(pickedFile!=null){
+        _image2 = File(pickedFile.path);
+      }else{
+        print("no image picked");
+      }
+    });
+  }
+
   // Function to upload the image
   Future<void> _uploadImage() async {
+    if (_image1 == null) {
+      UiHelper.CustomAlertBox(context, "Please upload image");
+      return;
+    }
     final uri = Uri.parse(frontcover); // Your backend URL
-
-    // Create a multipart request
-    var request = http.MultipartRequest('POST', uri);
-
-    var stream = new http.ByteStream(_image1!.openRead());
-    stream.cast();
-
-    var length = await _image1!.length();
-
-    var multipartFile = http.MultipartFile(
-      'image1', // Name of the form field
-       stream,
-       length
-    );
+    try {
+      // Create a multipart request
+      var request = http.MultipartRequest('POST', uri);
 
 
-    // Add the image file to the request
-    var pic = await http.MultipartFile.fromPath("image1", _image1!.path);
-    request.files.add(multipartFile);
+      // Add the image file to the request
+      var pic = await http.MultipartFile.fromPath('frontimage', _image1!.path);
+      request.files.add(pic);
+      print("Image Path: ${_image1!.path}");
+      var file = File(_image1!.path);
+      print("File size: ${await file.length()} bytes");
 
-    // Send the request and get the response
-    var response = await request.send();
 
-    if (response.statusCode == 200) {
-      print("Image uploaded successfully!");
-      // You can now save the image URL to your MongoDB
-    } else {
-      print("Image upload failed.");
+
+      // Send the request and get the response
+      var response = await request.send();
+      String responseBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        print("Image uploaded successfully!");
+        // You can now save the image URL to your MongoDB
+      } else {
+        print("Image upload failed with status code: ${response.statusCode}");
+        print("Response body: $responseBody");
+      }
+    } catch (e) {
+      // Catch any errors such as network issues or file not found
+      print("Error occurred during image upload: $e");
+      UiHelper.CustomAlertBox(context, "An error occurred while uploading the image.");
     }
   }
 
@@ -95,6 +122,12 @@ class selldetailsState extends State<selldetails>{
       UiHelper.CustomAlertBox(
           context, "Enter Required Fields"); // Check if any field is empty
     }
+   /* if (_image1 == null || _image2 == null) {
+      UiHelper.CustomAlertBox(context, "Please upload both images");
+      return;
+    }
+
+    await _uploadImage();*/
 
 // Prepare data for registration API request
     var data = {
@@ -118,7 +151,7 @@ class selldetailsState extends State<selldetails>{
         print(response);
 
         // You could navigate to the home page or show a success message
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => homePage()));
       } else {
         print('Posting failed');
@@ -130,6 +163,73 @@ class selldetailsState extends State<selldetails>{
       print('Error during posting: $e');
       UiHelper.CustomAlertBox(context, "An error occurred, please try again later");
     }
+  }
+  Widget bottomSheet1(){
+    return Container(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20,vertical:20 ),
+      child: Column(
+        children: <Widget>[
+          Text("Choose Profile Photo",style: TextStyle(fontSize: 22,fontWeight:FontWeight
+              .w600,color: Colors.brown),),
+          SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.camera,size: 30),
+                onPressed: (){
+                 takeCameraImage1();
+                },
+                label: Text("Camera",style: TextStyle(fontSize: 20),),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.image,size: 30,),
+                onPressed: (){
+                 getGalleryImage1();
+                },
+                label: Text("Gallery",style: TextStyle(fontSize: 20,),),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget bottomSheet2(){
+    return Container(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20,vertical:20 ),
+      child: Column(
+        children: <Widget>[
+          Text("Choose Profile Photo",style: TextStyle(fontSize: 22,fontWeight:FontWeight
+              .w600,color: Colors.brown),),
+          SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.camera,size: 30),
+                onPressed: (){
+                  takeCameraImage2();
+                },
+                label: Text("Camera",style: TextStyle(fontSize: 20),),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.image,size: 30,),
+                onPressed: (){
+                  getGalleryImage2();
+                },
+                label: Text("Gallery",style: TextStyle(fontSize: 20,),),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -150,7 +250,7 @@ class selldetailsState extends State<selldetails>{
           ),
         ),
         body: Stack(
-            children: [
+            children:[
               Container(
                 child:SingleChildScrollView(
               child:Container(
@@ -219,7 +319,7 @@ class selldetailsState extends State<selldetails>{
                           children: [
                         InkWell(
                         onTap:(){
-                      getGalleryImage1();
+                     showModalBottomSheet(context: context, builder: ((builder)=>bottomSheet1()),);
                       },
                           child:Container(
                               height:100 ,
@@ -259,7 +359,8 @@ class selldetailsState extends State<selldetails>{
                               children: [
                                 InkWell(
                                   onTap:(){
-                                   getGalleryImage2();
+                                      showModalBottomSheet(context: context, builder: ((builder)=>bottomSheet2()),);
+
                                   },
                                     child: Container(
                               height:100 ,
@@ -497,6 +598,7 @@ class selldetailsState extends State<selldetails>{
                   )
               )
             ])
+
     );
   }
 }
