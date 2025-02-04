@@ -284,6 +284,8 @@ class RegisterPageState extends State<RegisterPage>{
                                             icon: Icon(_ObscureText1 ? Icons.visibility_off : Icons.visibility)),
                                         enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(color: Color(0xffFFB330))),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Color(0xffFFB330))),
                                       )
                                   )
                               )),
@@ -311,6 +313,8 @@ class RegisterPageState extends State<RegisterPage>{
                                             },
                                             icon: Icon(_ObscureText2 ? Icons.visibility_off : Icons.visibility)),
                                         enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Color(0xffFFB330))),
+                                        focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(color: Color(0xffFFB330))),
                                       )
                                   )

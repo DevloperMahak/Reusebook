@@ -95,8 +95,9 @@ class LanguagePageState extends State<LanguagePage> {
                                   prefixIcon: Icon(Icons.language_rounded,color: Color(0xffFFB330),size: 20,),
                                   suffixIcon: Icon(Icons.arrow_drop_down,color: Color(0xff1C1B1F),size: 20,),
                                   enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Color(0xffFFB330))
-                                  ),
+                                      borderSide: BorderSide(color: Color(0xffFFB330))),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Color(0xffFFB330))),
                                   hintText: "Select language"
                               )),
                         )),

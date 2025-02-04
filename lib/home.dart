@@ -29,7 +29,7 @@ class homePage extends StatelessWidget {
                 },
                 child: Padding(
                     padding: EdgeInsets.only(
-                        left: 210),
+                        left: 20),
                     child: Icon(
                       Icons.notifications, size: 28,
                       color: Color(0xff3D4652),))),
@@ -93,7 +93,6 @@ class homePage extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
-                                  Text('$finalEmail'),
                                   Container(
                                     width: 360,
                                     height: 55,
@@ -114,9 +113,9 @@ class homePage extends StatelessWidget {
                                                   Radius.circular(30)),
                                               borderSide: BorderSide(
                                                   color: Colors.white
-                                              )
-                                          )
-
+                                              )),
+                                          focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Color(0xffFFB330))),
                                       ),
                                     ),
                                   )
