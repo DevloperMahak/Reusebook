@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reusebook/login.dart';
+import 'package:reusebook/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Navbar extends StatelessWidget {
@@ -13,7 +14,7 @@ class Navbar extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
               accountName: Text("User Name",style: TextStyle(color:Color(0xff3D4652))),
-              accountEmail: Text("Useremail@gmail.com",style: TextStyle(color:Color(0xff3D4652))),
+              accountEmail: Text('$finalEmail',style: TextStyle(color:Color(0xff3D4652))),
               currentAccountPicture: CircleAvatar(
                 child: ClipOval(
                   child: Container(
