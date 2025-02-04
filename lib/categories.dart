@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,8 +8,38 @@ import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
 import 'package:reusebook/uihelper.dart';
 import 'package:http/http.dart' as http;
+import 'package:reusebook/url.dart';
 import 'home.dart';
 import 'orders.dart';
+
+class Book {
+  String? bookName;
+  String? bookDescription;
+  String? publication;
+  String? author;
+  String? printPrice;
+  String? sellingPrice;
+
+  Book({
+    required this.bookName,
+    required this.bookDescription,
+    required this.publication,
+    required this.author,
+    required this.printPrice,
+    required this.sellingPrice,
+  });
+
+  factory Book.fromJson(Map<String, dynamic> json) {
+    return Book(
+      bookName: json['BookName']?? 'Unknown', // Default value if null
+      bookDescription: json['BookDescription']?? 'No description available', // Default value if null
+      publication: json['Publication']?? 'Unknown', // Default value if null
+      author: json['Author']?? 'Unknown', // Default value if null
+      printPrice: json['PrintPrice']?? '0.00', // Default value if null
+      sellingPrice: json['SellingPrice']?? '0.00', // Default value if null
+    );
+  }
+}
 
 class categoriesPage extends StatefulWidget {
   const categoriesPage({super.key});
@@ -16,7 +47,29 @@ class categoriesPage extends StatefulWidget {
   State<categoriesPage>createState()=>categoriesPageState();
 }
 
-class categoriesPageState extends State<categoriesPage>{
+class categoriesPageState extends State<categoriesPage> {
+
+  late Future<List<Book>> books;
+
+// GET request to fetch all books
+    Future<List<Book>> fetchBooks() async {
+      final response = await http.get(Uri.parse(getbookdetails));
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body)['books'];
+        return jsonResponse.map((data) => Book.fromJson(data)).toList();
+      } else {
+        print("Failed to load books");
+        throw Exception('Failed to load books');
+      }
+    }
+
+
+  @override
+  void initState() {
+    super.initState();
+    books = fetchBooks();  // Fetch books when the screen is initialized
+  }
 
 
   @override
@@ -47,7 +100,9 @@ class categoriesPageState extends State<categoriesPage>{
                           borderSide: BorderSide(
                               color: Colors.white
                           )
-                      )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xffFFB330))),
 
                   ),
                 )),
@@ -67,8 +122,7 @@ class categoriesPageState extends State<categoriesPage>{
           ),
         ),
       ),
-      body:
-           Stack(
+      body:  Stack(
               children: [
                 // Horizontal filter bar
                 SingleChildScrollView(
@@ -183,7 +237,36 @@ class categoriesPageState extends State<categoriesPage>{
 
                 ),
                 // Grid of books
-              Center(
+                FutureBuilder<List<Book>>(
+                  future: books,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No books available'));
+                    } else {
+                      return GridView.builder(
+                        padding: const EdgeInsets.only(top: 70, left: 10, right: 10),
+                        itemCount: snapshot.data!.length,
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          mainAxisExtent: 300,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          final book = snapshot.data![index];
+                          return BookCard(book: book);
+                        },
+                      );
+                    }
+                  },
+                ),
+
+              /*Center(
             child:Container(
                 margin: EdgeInsets.only(top:70,right: 10,left:10 ),
                     child: Container(
@@ -196,20 +279,20 @@ class categoriesPageState extends State<categoriesPage>{
           children: [
             Container(
                 margin: const EdgeInsets.only(top:10),
-                height: 60,
-                width: 60,
+                height: 80,
+                width: 70,
                 child:Image.asset('assets/images/book.png')),
             Container(
                 margin: const EdgeInsets.only(top:10),
-              child:Text(bookname[index],style: TextStyle(fontSize:18,fontWeight: FontWeight.w500),)),
+              child:Text(bookname[index],style: TextStyle(fontSize:20,fontWeight: FontWeight.w500),)),
            Container(
-                margin: const EdgeInsets.only(top:2),
-                child:Text("By Author name ",style: TextStyle(fontSize:15,fontWeight: FontWeight.w400),)),
+                margin: const EdgeInsets.only(bottom:8),
+                child:Text("By Author name ",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400),)),
                         Center(
                         child:Container(
                         margin: const EdgeInsets.only(top:5,),
-                        height: 30,
-                        width: 150,
+                        height: 40,
+                        width: 170,
                         child: ElevatedButton(onPressed: (){},
                         style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
@@ -218,13 +301,13 @@ class categoriesPageState extends State<categoriesPage>{
                         borderRadius: BorderRadius.circular(5)
                         )
                         ),
-                        child: Text("Add to Cart")),
+                        child: Text("Add to Cart",style: TextStyle(fontSize: 16),)),
                         )
                         ),
             Container(
               alignment: Alignment.bottomRight,
-                margin: const EdgeInsets.only(top:5,right: 10),
-                child:Text("View more > ",style: TextStyle(fontSize:10,fontWeight: FontWeight.w400),)),
+                margin: const EdgeInsets.only(top:10,right: 10),
+                child:Text("View more > ",style: TextStyle(fontSize:14,fontWeight: FontWeight.w400),)),
           ],
         ),
         decoration: BoxDecoration(
@@ -234,10 +317,14 @@ class categoriesPageState extends State<categoriesPage>{
               color: Color(0xffFFB330)
           ) ,
         ),
-      );},itemCount: bookname.length,gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 10,mainAxisSpacing: 10),
+      );},itemCount: bookname.length,gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200,  // You can adjust this value based on screen size
+                          childAspectRatio: 0.75,    // Adjust aspect ratio for better layout
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10),
                         ),
 
-                        ))),
+                    )
+                        )),*/
                 // Bottom Navigation Bar
                 Positioned(
                     bottom: 0,
@@ -264,7 +351,7 @@ class categoriesPageState extends State<categoriesPage>{
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              Navigator.push(context,
+                                              Navigator.pushReplacement(context,
                                                   MaterialPageRoute(builder: (context) =>
                                                       categoriesPage()));
                                             },
@@ -362,3 +449,80 @@ class categoriesPageState extends State<categoriesPage>{
     );
   }
 }
+
+class BookCard extends StatelessWidget {
+  final Book book;
+
+  BookCard({required this.book});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 180,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            height: 80,
+            width: 70,
+            child: Image.asset('assets/images/book.png'), // Add the book image here
+          ),
+          Center(
+            child:Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: Text(
+              "${book.bookName}", // Display the book name
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+          )),
+          Center(
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              "By ${book.author}", // Display author
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+            ),
+          )),
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(top: 5),
+              height: 40,
+              width: 170,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Implement Add to Cart functionality here
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Color(0xffFFB330),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                child: Text(
+                  "Add to Cart",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomRight,
+            margin: const EdgeInsets.only(top: 10, right: 10),
+            child: Text(
+              "View more > ",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            ),
+          ),
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        border: Border.all(color: Color(0xffFFB330)),
+      ),
+    );
+  }
+}
+
