@@ -124,11 +124,41 @@ class categoriesPageState extends State<categoriesPage> {
       ),
       body:  Stack(
               children: [
+                // Grid of books
+                FutureBuilder<List<Book>>(
+                  future: books,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No books available'));
+                    } else {
+                      return GridView.builder(
+                        padding: const EdgeInsets.only(top: 70, left: 10, right: 10),
+                        itemCount: snapshot.data!.length,
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          mainAxisExtent: 300,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          final book = snapshot.data![index];
+                          return BookCard(book: book);
+                        },
+                      );
+                    }
+                  },
+                ),
+
                 // Horizontal filter bar
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child:Container(
-                    width: 780,
+                    width: 760,
                     height:60,
                     color: Color(0xffF2F0F0),
                     child: Row(
@@ -138,6 +168,7 @@ class categoriesPageState extends State<categoriesPage> {
                           height: 40,
                           width: 100,
                           child:Row(
+                              mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Center(
@@ -234,97 +265,8 @@ class categoriesPageState extends State<categoriesPage> {
                       ],
                     ),
                   ),
-
-                ),
-                // Grid of books
-                FutureBuilder<List<Book>>(
-                  future: books,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No books available'));
-                    } else {
-                      return GridView.builder(
-                        padding: const EdgeInsets.only(top: 70, left: 10, right: 10),
-                        itemCount: snapshot.data!.length,
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          mainAxisExtent: 300,
-                          childAspectRatio: 0.75,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemBuilder: (context, index) {
-                          final book = snapshot.data![index];
-                          return BookCard(book: book);
-                        },
-                      );
-                    }
-                  },
                 ),
 
-              /*Center(
-            child:Container(
-                margin: EdgeInsets.only(top:70,right: 10,left:10 ),
-                    child: Container(
-                      width: screenwidth,
-                      child:GridView.builder(itemBuilder: (context,index){
-       return Container(
-        //height:400 ,
-        width: 180,
-        child: Column(
-          children: [
-            Container(
-                margin: const EdgeInsets.only(top:10),
-                height: 80,
-                width: 70,
-                child:Image.asset('assets/images/book.png')),
-            Container(
-                margin: const EdgeInsets.only(top:10),
-              child:Text(bookname[index],style: TextStyle(fontSize:20,fontWeight: FontWeight.w500),)),
-           Container(
-                margin: const EdgeInsets.only(bottom:8),
-                child:Text("By Author name ",style: TextStyle(fontSize:18,fontWeight: FontWeight.w400),)),
-                        Center(
-                        child:Container(
-                        margin: const EdgeInsets.only(top:5,),
-                        height: 40,
-                        width: 170,
-                        child: ElevatedButton(onPressed: (){},
-                        style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Color(0xffFFB330),
-                        shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)
-                        )
-                        ),
-                        child: Text("Add to Cart",style: TextStyle(fontSize: 16),)),
-                        )
-                        ),
-            Container(
-              alignment: Alignment.bottomRight,
-                margin: const EdgeInsets.only(top:10,right: 10),
-                child:Text("View more > ",style: TextStyle(fontSize:14,fontWeight: FontWeight.w400),)),
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          border:Border.all(
-              color: Color(0xffFFB330)
-          ) ,
-        ),
-      );},itemCount: bookname.length,gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200,  // You can adjust this value based on screen size
-                          childAspectRatio: 0.75,    // Adjust aspect ratio for better layout
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10),
-                        ),
-
-                    )
-                        )),*/
                 // Bottom Navigation Bar
                 Positioned(
                     bottom: 0,
@@ -468,14 +410,13 @@ class BookCard extends StatelessWidget {
             width: 70,
             child: Image.asset('assets/images/book.png'), // Add the book image here
           ),
-          Center(
-            child:Container(
+          Container(
             margin: const EdgeInsets.only(top: 10),
             child: Text(
               "${book.bookName}", // Display the book name
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
-          )),
+          ),
           Center(
           child: Container(
             margin: const EdgeInsets.only(bottom: 8),
