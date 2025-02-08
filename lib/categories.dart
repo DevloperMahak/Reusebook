@@ -9,6 +9,7 @@ import 'package:reusebook/shopkeeper.dart';
 import 'package:reusebook/uihelper.dart';
 import 'package:http/http.dart' as http;
 import 'package:reusebook/url.dart';
+import 'package:reusebook/bookDetails.dart';
 import 'home.dart';
 import 'orders.dart';
 
@@ -399,9 +400,16 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap:(){Navigator.push(context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  bookDetailsPage()));},
+        child:Container(
       width: 180,
-      child: Column(
+      child: Stack(
+        children: [
+          Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
@@ -430,7 +438,7 @@ class BookCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 5),
               height: 40,
               width: 170,
-              child: ElevatedButton(
+              child: ElevatedButton.icon(
                 onPressed: () {
                   // Implement Add to Cart functionality here
                 },
@@ -441,7 +449,8 @@ class BookCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-                child: Text(
+                icon: Icon(Icons.add_shopping_cart,size: 25,color: Colors.white,), // Cart icon
+                label: Text(
                   "Add to Cart",
                   style: TextStyle(fontSize: 16),
                 ),
@@ -453,17 +462,32 @@ class BookCard extends StatelessWidget {
             margin: const EdgeInsets.only(top: 10, right: 10),
             child: Text(
               "View more > ",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400,color:Color(0xff3D4652) ),
             ),
           ),
         ],
       ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        border: Border.all(color: Color(0xffFFB330)),
+        // Heart icon at the top right corner
+        Positioned(
+            top: 10,
+            right: 5,
+            child: IconButton(
+              icon: Icon(
+                Icons.favorite_border, // Heart icon
+                color: Color(0xff3D4652),
+              ),
+              onPressed: () {
+                // Implement heart functionality here
+              },
+            ),
       ),
-    );
+  ]),
+      decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+      border: Border.all(color: Color(0xffFFB330)),
+    )
+    ));
   }
 }
 

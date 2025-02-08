@@ -181,6 +181,7 @@ class selldetailsState extends State<selldetails>{
                 icon: Icon(Icons.camera,size: 30),
                 onPressed: (){
                  takeCameraImage1();
+                 Navigator.pop(context); // Close bottom sheet
                 },
                 label: Text("Camera",style: TextStyle(fontSize: 20),),
               ),
@@ -188,6 +189,7 @@ class selldetailsState extends State<selldetails>{
                 icon: Icon(Icons.image,size: 30,),
                 onPressed: (){
                  getGalleryImage1();
+                 Navigator.pop(context); // Close bottom sheet
                 },
                 label: Text("Gallery",style: TextStyle(fontSize: 20,),),
               ),
@@ -215,6 +217,7 @@ class selldetailsState extends State<selldetails>{
                 icon: Icon(Icons.camera,size: 30),
                 onPressed: (){
                   takeCameraImage2();
+                  Navigator.pop(context); // Close bottom sheet
                 },
                 label: Text("Camera",style: TextStyle(fontSize: 20),),
               ),
@@ -222,6 +225,7 @@ class selldetailsState extends State<selldetails>{
                 icon: Icon(Icons.image,size: 30,),
                 onPressed: (){
                   getGalleryImage2();
+                  Navigator.pop(context); // Close bottom sheet
                 },
                 label: Text("Gallery",style: TextStyle(fontSize: 20,),),
               ),
@@ -238,7 +242,7 @@ class selldetailsState extends State<selldetails>{
     final screenheight=MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Fill Book Details",style: TextStyle(fontSize:28,color: Colors.black),),
+          title: Text("Fill Book Details",style: TextStyle(fontSize:25,color: Colors.black),),
           flexibleSpace:Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [

@@ -13,7 +13,7 @@ class orderPage extends StatelessWidget {
     final screenwidth=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Orders",style: TextStyle(fontSize:28,color: Colors.black),),
+        title: Text("Orders",style: TextStyle(fontSize:25,color: Colors.black),),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [

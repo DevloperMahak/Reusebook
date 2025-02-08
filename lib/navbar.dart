@@ -1,12 +1,131 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reusebook/login.dart';
 import 'package:reusebook/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Navbar extends StatelessWidget {
+class Navbar extends StatefulWidget{
+  const Navbar({super.key});
+  @override
+  State<Navbar>createState()=>NavbarState();
+}
+
+class NavbarState extends State<Navbar> {
+
+  File? _profileImage;
+  final picker1 = ImagePicker();
+
+  Future<void> getGalleryImage()async{
+    final pickedFile = await picker1.pickImage(source:ImageSource.gallery,imageQuality: 80);
+    setState(() {
+      if(pickedFile!=null){
+        _profileImage = File(pickedFile.path);
+      }else{
+        print("no image picked");
+      }
+    });
+  }
+
+  Future<void> takeCameraImage()async{
+    final pickedFile = await picker1.pickImage(source:ImageSource.camera,imageQuality: 80);
+    setState(() {
+      if(pickedFile!=null){
+        _profileImage = File(pickedFile.path);
+      }else{
+        print("no image picked");
+      }
+    });
+  }
+
+  Widget editPhoto(){
+    return Container(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20,vertical:20 ),
+      child: Column(
+        children: <Widget>[
+          Text("Choose Profile Photo",style: TextStyle(fontSize: 20,fontWeight:FontWeight
+              .w600,color: Colors.brown),),
+          SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.camera,size: 25),
+                onPressed: (){
+                  takeCameraImage();
+                  Navigator.pop(context); // Close bottom sheet
+                },
+                label: Text("Camera",style: TextStyle(fontSize: 18),),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.image,size: 25,),
+                onPressed: (){
+                  getGalleryImage();
+                  Navigator.pop(context); // Close bottom sheet
+                },
+                label: Text("Gallery",style: TextStyle(fontSize: 18,),),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 220,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Profile Photo Options",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 10),
+          TextButton.icon(
+            icon: Icon(Icons.camera_alt, size: 25,color: Color(0xff3D4652)),
+            onPressed: () {
+              takeCameraImage();
+              Navigator.pop(context);
+            },
+            label: Text("Take a new photo", style: TextStyle(fontSize: 16, color: Color(0xff3D4652))),
+          ),
+          TextButton.icon(
+            icon: Icon(Icons.photo_library, size: 25, color: Color(0xff3D4652)),
+            onPressed: () {
+              getGalleryImage();
+              Navigator.pop(context);
+            },
+            label: Text("Choose from gallery", style: TextStyle(fontSize: 16, color: Color(0xff3D4652))),
+          ),
+          TextButton.icon(
+            icon: Icon(Icons.delete, size: 25, color: Color(0xff3D4652)),
+            onPressed: () {
+              // Add your remove logic here
+              Navigator.pop(context);
+            },
+            label: Text("Remove profile photo", style: TextStyle(fontSize: 16,color: Color(0xff3D4652))),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
+
     return Drawer(
       child: Container(
         color: Colors.white,
@@ -16,13 +135,31 @@ class Navbar extends StatelessWidget {
               accountName: Text("User Name",style: TextStyle(color:Color(0xff3D4652))),
               accountEmail: Text('$finalEmail',style: TextStyle(color:Color(0xff3D4652))),
               currentAccountPicture: CircleAvatar(
-                child: ClipOval(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    child:Image.asset("assets/images/user-avatar.png")),
+                child: Stack(
+                  children: [
+                    InkWell(
+                    onTap: (){
+              showModalBottomSheet(context: context, builder: ((builder)=>bottomSheet()),);
+              },
+                  child:CircleAvatar(
+                    radius: 80,
+                      //child:_profileImage!=null?Image.file(_profileImage!.absolute): Center(child: Icon(Icons.person_rounded,size: 35,color:Colors.grey ,)),
+                    backgroundImage:_profileImage!=null?FileImage(_profileImage!) :AssetImage("assets/images/woman.png") as ImageProvider<Object>,
+                    backgroundColor: Colors.white,)),
+                  Positioned(
+                    bottom: 2,
+                      right: 3,
+                      child:Icon(Icons.camera_alt,size: 20,color: Color(0xff3D4652)))]
                 ),
               ),
+            otherAccountsPictures: [
+              IconButton(
+                icon: Icon(Icons.edit, color:Color(0xff3D4652)),
+                onPressed: () {
+                  // Profile edit
+                },
+              ),
+            ],
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
                   Color(0xffFFB330),
@@ -117,22 +254,25 @@ class Navbar extends StatelessWidget {
           Center(
               child: Container(
                 margin: const EdgeInsets.only(top: 20,bottom: 50),
-                height: 48,
+                height: 40,
                 width: 200,
-                child:ElevatedButton(
+                child:ElevatedButton.icon(
+                  onPressed: () async{
+                    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                    sharedPreferences.remove('email');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=>LoginPage(),
+                        ));
+                  },
                     style:ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Color(0xffFFB330),
-                    ),
-                    onPressed: () async{
-                      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                      sharedPreferences.remove('email');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context)=>LoginPage(),
-                          ));
-                    },
-                    child: const Text("Log Out")),))
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                    )),
+                    icon: Icon(Icons.logout,size: 25,color: Colors.white,), // logout icon
+                    label: const Text("Log Out")),))
         ],
       ),
       )

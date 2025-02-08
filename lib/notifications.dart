@@ -8,12 +8,13 @@ import 'home.dart';
 import 'orders.dart';
 
 class notificationsPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifications",style: TextStyle(fontSize:28,color: Colors.black),),
+        title: Text("My Notifications",style: TextStyle(fontSize:25,color: Colors.black),),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
@@ -26,7 +27,8 @@ class notificationsPage extends StatelessWidget {
       ),
       body: Stack(
     children: [
-      Center(
+      noNotification(),
+      /*Center(
         child: Container(
     width: screenwidth,
     decoration: BoxDecoration(
@@ -52,7 +54,7 @@ class notificationsPage extends StatelessWidget {
       },
       itemCount: 15,
     ),
-      )),
+      )),*/
       Positioned(
           bottom: 0,
           child: Container(
@@ -173,6 +175,36 @@ class notificationsPage extends StatelessWidget {
           )
       )
     ])
+    );
+  }
+}
+
+class noNotification extends StatelessWidget {
+
+  noNotification();
+
+  @override
+  Widget build(BuildContext context) {
+    final screenheight=MediaQuery.of(context).size.height;
+    return Center(
+            child: Container(
+              height: screenheight,
+              margin: EdgeInsets.only(top:180,left: 20,right: 20),
+              child:Column(
+                children: [
+                Container(
+                  margin: EdgeInsets.only(bottom:30),
+                height:100,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Color(0xffFFD77F),
+                ),
+                child: Icon(Icons.notifications_active_sharp,size:50,color: Color(0xff3D4652),),),
+                  Text("No new notifications!",style: TextStyle(fontSize:22,color: Colors.black,fontWeight: FontWeight.w600),),
+                  Text("You will be notified with alerts and latest offers over here",textAlign: TextAlign.center,style: TextStyle(fontSize:18,color: Colors.black87,fontWeight: FontWeight.w400),),
+                ],
+              ),)
     );
   }
 }

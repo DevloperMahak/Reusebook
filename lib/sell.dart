@@ -16,7 +16,7 @@ class sellPage extends StatelessWidget {
     final screenheight=MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sell",style: TextStyle(fontSize:28,color: Colors.black),),
+        title: Text("Sell",style: TextStyle(fontSize:25,color: Colors.black),),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
@@ -45,7 +45,7 @@ class sellPage extends StatelessWidget {
                 Container(
                     child: Text("Selling Details",
                     style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 22,
                         fontWeight: FontWeight
                             .w600))),
                 Container(
@@ -124,7 +124,7 @@ class sellPage extends StatelessWidget {
                   margin: const EdgeInsets.only(top:  30,bottom: 20),
                   child:Text("How It Works? ",
                     style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 22,
                         fontWeight: FontWeight
                             .w600)),
                 ),
@@ -134,11 +134,20 @@ class sellPage extends StatelessWidget {
                       height: 230,
                       width: 335,
                       decoration: BoxDecoration(
+                        boxShadow:  [
+                      BoxShadow(color: Colors.black.withOpacity(0.2), // Shadow color with opacity
+                    blurRadius: 3, // Softness of the shadow
+                    spreadRadius: 1, // How much the shadow expands
+                    offset: Offset(2, 2),)], // X and Y position of the shadow,
                         borderRadius: BorderRadius.all(
                              Radius.circular(20)),
-                        color: Color(
-                            0xffFFFCCE) ,
-                      ),
+                            gradient: LinearGradient(
+                            begin: Alignment.topLeft,  // Start point
+                            end: Alignment.bottomRight, // End point
+                            colors: [
+                            Colors.white,
+                        Color(0xffFFFCCE),
+                      ])),
                       child: Column(
                         children: [
                           Container(
@@ -195,11 +204,20 @@ class sellPage extends StatelessWidget {
                       width: 335,
                       margin: const EdgeInsets.only(top:10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(20)),
-                        color: Color(
-                            0xffFFFCCE) ,
-                      ),
+                          boxShadow:  [
+                            BoxShadow(color: Colors.black.withOpacity(0.2), // Shadow color with opacity
+                              blurRadius: 3, // Softness of the shadow
+                              spreadRadius: 1, // How much the shadow expands
+                              offset: Offset(2, 2),)], // X and Y position of the shadow,
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(20)),
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,  // Start point
+                              end: Alignment.bottomRight, // End point
+                              colors: [
+                                Colors.white,
+                                Color(0xffFFFCCE),
+                              ])),
                       child: Column(
                           children: [
                             Container(
@@ -256,11 +274,20 @@ class sellPage extends StatelessWidget {
                       width: 335,
                       margin: const EdgeInsets.only(top:10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(20)),
-                        color: Color(
-                            0xffFFFCCE) ,
-                      ),
+                          boxShadow:  [
+                            BoxShadow(color: Colors.black.withOpacity(0.2), // Shadow color with opacity
+                              blurRadius: 3, // Softness of the shadow
+                              spreadRadius: 1, // How much the shadow expands
+                              offset: Offset(2, 2),)], // X and Y position of the shadow,
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(20)),
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,  // Start point
+                              end: Alignment.bottomRight, // End point
+                              colors: [
+                                Colors.white,
+                                Color(0xffFFFCCE),
+                              ])),
                       child: Column(
                           children: [
                             Container(

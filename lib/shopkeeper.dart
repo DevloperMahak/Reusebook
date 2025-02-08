@@ -13,7 +13,7 @@ class shopkeeperPage extends StatelessWidget {
     final screenwidth=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shopkeepers",style: TextStyle(fontSize:28,color: Colors.black),),
+        title: Text("Shopkeepers",style: TextStyle(fontSize:25,color: Colors.black),),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
