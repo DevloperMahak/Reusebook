@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
@@ -10,37 +11,14 @@ import 'package:reusebook/uihelper.dart';
 import 'package:http/http.dart' as http;
 import 'package:reusebook/url.dart';
 import 'package:reusebook/bookDetails.dart';
+import 'controllers/cart_controller.dart';
+import 'controllers/favorites_controller.dart';
 import 'home.dart';
+import 'myStore.dart';
 import 'orders.dart';
+import 'models/book.dart';
 
-class Book {
-  String? bookName;
-  String? bookDescription;
-  String? publication;
-  String? author;
-  String? printPrice;
-  String? sellingPrice;
 
-  Book({
-    required this.bookName,
-    required this.bookDescription,
-    required this.publication,
-    required this.author,
-    required this.printPrice,
-    required this.sellingPrice,
-  });
-
-  factory Book.fromJson(Map<String, dynamic> json) {
-    return Book(
-      bookName: json['BookName']?? 'Unknown', // Default value if null
-      bookDescription: json['BookDescription']?? 'No description available', // Default value if null
-      publication: json['Publication']?? 'Unknown', // Default value if null
-      author: json['Author']?? 'Unknown', // Default value if null
-      printPrice: json['PrintPrice']?? '0.00', // Default value if null
-      sellingPrice: json['SellingPrice']?? '0.00', // Default value if null
-    );
-  }
-}
 
 class categoriesPage extends StatefulWidget {
   const categoriesPage({super.key});
@@ -113,6 +91,12 @@ class categoriesPageState extends State<categoriesPage> {
             child: Icon(Icons.favorite,size: 28,color: Color(0xff3D4652),),
           ),
         ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black), // Back arrow icon
+          onPressed: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>homePage()));
+          },
+        ),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
@@ -303,7 +287,7 @@ class categoriesPageState extends State<categoriesPage> {
                                               width: 32,
                                               child: Image.asset(
                                                 "assets/images/categories.png",),),),
-                                          Text("categories",
+                                          Text('categories'.tr,
                                               style: TextStyle(fontSize: 12, color: Color(
                                                   0xff3D4652)))
                                         ]),),
@@ -321,7 +305,7 @@ class categoriesPageState extends State<categoriesPage> {
                                               width: 32,
                                               child: Image.asset(
                                                 "assets/images/package.png",),)),
-                                          Text("orders",
+                                          Text('orders'.tr,
                                               style: TextStyle(fontSize: 12, color: Color(
                                                   0xff3D4652)))
                                         ]),),
@@ -340,7 +324,7 @@ class categoriesPageState extends State<categoriesPage> {
                                                   backgroundColor: Colors.white,
                                                   child: Icon(Icons.home, size: 32,
                                                       color: Color(0xff3D4652)))),
-                                          Text("Home",
+                                          Text('home'.tr,
                                               style: TextStyle(fontSize: 12, color: Color(
                                                   0xff3D4652)))
                                         ]),),
@@ -358,7 +342,7 @@ class categoriesPageState extends State<categoriesPage> {
                                               width: 32,
                                               child: Image.asset(
                                                 "assets/images/merchant.png",),)),
-                                          Text("Shopkeepers",
+                                          Text('shopkeepers'.tr,
                                               style: TextStyle(fontSize: 12, color: Color(
                                                   0xff3D4652)))
                                         ]),),
@@ -378,7 +362,7 @@ class categoriesPageState extends State<categoriesPage> {
                                                 width: 32,
                                                 child: Image.asset(
                                                   "assets/images/sell.png",),)),
-                                          Text("Sell",
+                                          Text('sell'.tr,
                                               style: TextStyle(fontSize: 12, color: Color(
                                                   0xff3D4652)))
                                         ]),),
@@ -395,6 +379,7 @@ class categoriesPageState extends State<categoriesPage> {
 
 class BookCard extends StatelessWidget {
   final Book book;
+  final FavoritesController favoritesController = Get.find();
 
   BookCard({required this.book});
 
@@ -404,7 +389,7 @@ class BookCard extends StatelessWidget {
       onTap:(){Navigator.push(context,
           MaterialPageRoute(
               builder: (context) =>
-                  bookDetailsPage()));},
+                  bookDetailsPage(book: book)));},
         child:Container(
       width: 180,
       child: Stack(
@@ -440,7 +425,21 @@ class BookCard extends StatelessWidget {
               width: 170,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Implement Add to Cart functionality here
+                  final cartController = Get.find<CartController>();
+                  cartController.addToCart(book);
+
+                  Get.snackbar(
+                    "Success",
+                    "${book.bookName} added to cart!",
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Color(0xffFFD77F),
+                    colorText: Colors.black,
+                  );
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context)=>storePage(),
+                      ));
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -471,16 +470,25 @@ class BookCard extends StatelessWidget {
         Positioned(
             top: 10,
             right: 5,
-            child: IconButton(
-              icon: Icon(
-                Icons.favorite_border, // Heart icon
-                color: Color(0xff3D4652),
-              ),
-              onPressed: () {
-                // Implement heart functionality here
-              },
+            child: Obx(() {
+              final isFav = favoritesController.isFavorite(book);
+              return IconButton(
+                icon: Icon(
+                  isFav ? Icons.favorite : Icons.favorite_border,
+                  color: isFav ? Colors.red : const Color(0xff3D4652),
+                ),
+                onPressed: () {
+                  if (isFav) {
+                    favoritesController.removeFromFavorites(book);
+                    Get.snackbar("Removed", "${book.bookName} removed from favorites");
+                  } else {
+                    favoritesController.addToFavorites(book);
+                    Get.snackbar("Added", "${book.bookName} added to favorites");
+                  }
+                },
+              );
+            }),
             ),
-      ),
   ]),
       decoration: BoxDecoration(
       color: Colors.white,
