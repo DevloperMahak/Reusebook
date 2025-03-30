@@ -28,9 +28,23 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  get_storage: ^2.1.1
   flutter:
     sdk: flutter
+  shared_preferences: ^2.0.15
+  firebase_core: ^2.27.0  # Use latest if available
+  http: ^0.13.6  # You can use the latest version from pub.dev
+  image_picker: ^1.0.7  # (or check pub.dev for the latest version)
+  jwt_decoder: ^2.0.1  # Check for latest version on pub.dev
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  get: ^4.6.6  # For language switching dynamically
   sms_autofill: ^2.4.1
+flutter_gen:
+  integrations:
+    flutter_localizations: true
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -69,6 +83,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
