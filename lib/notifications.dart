@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
 
@@ -8,13 +9,29 @@ import 'home.dart';
 import 'orders.dart';
 
 class notificationsPage extends StatelessWidget {
+  final List<String> notifications = [
+    "Your order #1234 has been shipped.",
+    "Your item has been sold!",
+    "New offer: Get 10% off on all used books.",
+    "Your request has been accepted by the seller.",
+    // Add more notifications or leave list empty to show the "no notifications" UI
+  ];
+
+  notificationsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
+    final screenheight=MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Notifications",style: TextStyle(fontSize:25,color: Colors.black),),
+        title: Text('my_notifications'.tr,style: TextStyle(fontSize:25,color: Colors.black),),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black), // Back arrow icon
+          onPressed: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>homePage()));
+          },
+        ),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
@@ -27,7 +44,9 @@ class notificationsPage extends StatelessWidget {
       ),
       body: Stack(
     children: [
-      noNotification(),
+      notifications.isEmpty
+          ? noNotification(context)
+          : _notificationList(context, notifications),
       /*Center(
         child: Container(
     width: screenwidth,
@@ -55,6 +74,7 @@ class notificationsPage extends StatelessWidget {
       itemCount: 15,
     ),
       )),*/
+      // bottom nav...
       Positioned(
           bottom: 0,
           child: Container(
@@ -89,7 +109,7 @@ class notificationsPage extends StatelessWidget {
                                     width: 32,
                                     child: Image.asset(
                                       "assets/images/categories.png",),),),
-                                Text("categories",
+                                Text('categories'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -107,7 +127,7 @@ class notificationsPage extends StatelessWidget {
                                     width: 32,
                                     child: Image.asset(
                                       "assets/images/package.png",),)),
-                                Text("orders",
+                                Text('orders'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -126,7 +146,7 @@ class notificationsPage extends StatelessWidget {
                                         backgroundColor: Colors.white,
                                         child: Icon(Icons.home, size: 32,
                                             color: Color(0xff3D4652)))),
-                                Text("Home",
+                                Text('home'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -144,7 +164,7 @@ class notificationsPage extends StatelessWidget {
                                     width: 32,
                                     child: Image.asset(
                                       "assets/images/merchant.png",),)),
-                                Text("Shopkeepers",
+                                Text('shopkeepers'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -164,7 +184,7 @@ class notificationsPage extends StatelessWidget {
                                       width: 32,
                                       child: Image.asset(
                                         "assets/images/sell.png",),)),
-                                Text("Sell",
+                                Text('sell'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -179,12 +199,7 @@ class notificationsPage extends StatelessWidget {
   }
 }
 
-class noNotification extends StatelessWidget {
-
-  noNotification();
-
-  @override
-  Widget build(BuildContext context) {
+Widget noNotification(BuildContext context) {
     final screenheight=MediaQuery.of(context).size.height;
     return Center(
             child: Container(
@@ -207,4 +222,22 @@ class noNotification extends StatelessWidget {
               ),)
     );
   }
+Widget _notificationList(BuildContext context, List<String> notifications) {
+  return ListView.separated(
+    padding: const EdgeInsets.only(bottom: 80),
+    itemCount: notifications.length,
+    separatorBuilder: (_, __) => const Divider(
+      thickness: 2,
+      color: Color(0xffD9D9D9),
+    ),
+    itemBuilder: (context, index) {
+      return ListTile(
+        leading: const Icon(Icons.notifications, color: Color(0xff3D4652), size: 30),
+        title: Text(
+          notifications[index],
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
+    },
+  );
 }

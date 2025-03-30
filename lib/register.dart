@@ -15,31 +15,54 @@ class RegisterPageState extends State<RegisterPage>{
   var FirstName=TextEditingController();
   var LastName=TextEditingController();
   var Gender=TextEditingController();
-  var DOB=TextEditingController();
-  var BirthPlace=TextEditingController();
   var PhNo=TextEditingController();
   var WhatsappNo=TextEditingController();
-  var CollegeName=TextEditingController();
-  var CollegeState=TextEditingController();
-  var Branch=TextEditingController();
-  var Degree=TextEditingController();
-  var PassYear=TextEditingController();
   var EmailText=TextEditingController();
   var PasswordNum=TextEditingController();
   var ConfirmPasswordNum=TextEditingController();
+  var Pincode = TextEditingController();
+  var ShopState = TextEditingController();
+  var ShopName = TextEditingController();
+  var ShopAddress = TextEditingController();
+  var ShopCity = TextEditingController();
+  var ContactNo=TextEditingController();
+  var Address = TextEditingController();
+  var City = TextEditingController();
+  var State=TextEditingController();
+
+  String userType = 'Student'; // Default selection
 
   bool _ObscureText1 = true;
   bool _ObscureText2 = true;
 
 
 
-  Register(String firstname,String lastname,String gender,String dob,String birthplace,String phno,String whatsappno, String email,String password, String confirmpassword)async {
-    if (firstname == "" || lastname == "" || gender == "" || dob == "" ||
-        birthplace == "" || phno == "" || whatsappno == "" || email == "" ||
-        password == "" || confirmpassword == "") {
-      UiHelper.CustomAlertBox(
-          context, "Enter Required Fields"); // Check if any field is empty
+  Register(String firstname,String lastname,String gender,String phno,String whatsappno, String email,String password, String confirmpassword,String pincode,String shopstate,String shopname,String shopaddress,String shopcity,String contactno,String city,String state,String address)async {
+    // Common validation
+    if (EmailText.text.isEmpty || PasswordNum.text.isEmpty || ConfirmPasswordNum.text.isEmpty) {
+      UiHelper.CustomAlertBox(context, "Please fill all required fields");
+      return;
     }
+
+    // Student fields validation
+    if (userType == 'Student') {
+      if (FirstName.text.isEmpty || LastName.text.isEmpty || Gender.text.isEmpty ||
+          City.text.isEmpty || State.text.isEmpty || Address.text.isEmpty ||
+          Pincode.text.isEmpty) {
+        UiHelper.CustomAlertBox(context, "Please fill all student details");
+        return;
+      }
+    }
+
+    // Shopkeeper fields validation
+    if (userType == 'Shopkeeper') {
+      if (ShopName.text.isEmpty || FirstName.text.isEmpty || ShopAddress.text.isEmpty ||
+          ShopCity.text.isEmpty || ShopState.text.isEmpty || Pincode.text.isEmpty) {
+        UiHelper.CustomAlertBox(context, "Please fill all shopkeeper details");
+        return;
+      }
+    }
+
     if (password != confirmpassword) {
       UiHelper.CustomAlertBox(context,
           "Your Confirmpassword is not same as password"); // Check if passwords match
@@ -60,25 +83,43 @@ class RegisterPageState extends State<RegisterPage>{
     }
 
 // Prepare data for registration API request
-      var data = {
+    var data;
+
+    if (userType == 'Student') {
+      data = {
+        "UserType": userType,
         "FirstName": FirstName.text,
         "LastName": LastName.text,
         "Gender": Gender.text,
-        "DOB": DOB.text,
-        "BirthPlace": BirthPlace.text,
+        "City":City.text,
+        "State": State.text,
+        "Address": Address.text,
+        "Pincode": Pincode.text,
         "PhNo": PhNo.text,
         "WhatsappNo": WhatsappNo.text,
-        "CollegeName": CollegeName.text,
-        "CollegeState": CollegeState.text,
-        "Branch": Branch.text,
-        "Degree": Degree.text,
-        "PassYear": PassYear.text,
         "EmailText": EmailText.text,
         "PasswordNum": PasswordNum.text,
         "ConfirmPasswordNum": ConfirmPasswordNum.text,
       };
+    } else {
+      data = {
+        "UserType": userType,
+        "ShopName": ShopName.text,
+        "OwnerName": FirstName.text,
+        "ShopAddress": ShopAddress.text,
+        "ShopCity": ShopCity.text,
+        "ShopState": ShopState.text,
+        "Pincode": Pincode.text,
+        "PhNo": PhNo.text,
+        "WhatsappNo": WhatsappNo.text,
+        "EmailText": EmailText.text,
+        "PasswordNum": PasswordNum.text,
+        "ConfirmPasswordNum": ConfirmPasswordNum.text,
+      };
+    }
 
-      try {
+
+    try {
       // Send POST request to registration endpoint
       final response = await http.post(Uri.parse(registration),
           headers: {"Content-Type": "application/json"},
@@ -150,6 +191,7 @@ class RegisterPageState extends State<RegisterPage>{
         child:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Container(
                 margin: const EdgeInsets.only(top:25),
                 child :Center(
@@ -157,38 +199,96 @@ class RegisterPageState extends State<RegisterPage>{
             ),
             Container(
               margin: const EdgeInsets.only(left:23,top: 15 ),
-              child: const Text("First Name",style: TextStyle(fontSize: 16,),),),
+              child: const Text("User Type",style: TextStyle(fontSize: 16,),),),
 
-            UiHelper.CustomTextField3(FirstName, "Enter your first name here", false),
+            Center(
+              child: Container(
+                height: 48,
+                width: 366,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: const EdgeInsets.only(top:5,bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Color(0xffFFB330)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: userType,
+                    icon: Icon(Icons.arrow_drop_down, color: Colors.black),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    dropdownColor: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        userType = newValue!;
+                      });
+                    },
+                    items: ['Student', 'Shopkeeper'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
 
-            Container(
-              margin: const EdgeInsets.only(left:23 ),
-              child: const Text("Last Name",style: TextStyle(fontSize: 16,),),),
+// Dynamic Section based on userType
+            if (userType == 'Student') ...[
+              // Student-specific fields
+              UiHelper.label("First Name"),
+              UiHelper.CustomTextField3(FirstName, "Enter your first name here", false),
 
-            UiHelper.CustomTextField3(LastName, "Enter your last name here", false),
+              UiHelper.label("Last Name"),
+              UiHelper.CustomTextField3(LastName, "Enter your last name here", false),
 
-            Container(
-              margin: const EdgeInsets.only(left:23 ),
-              child: const Text("Gender",style: TextStyle(fontSize: 16,),),),
+              UiHelper.label("Gender"),
+              UiHelper.CustomTextField3(Gender, "Select Gender", false),
 
-            UiHelper.CustomTextField3(Gender, "Select Gender", false),
+              UiHelper.label("Email Address"),
+              UiHelper.CustomTextField1(EmailText, "youremail@gmail.com", Icons.email, false),
 
-            Container(
-              margin: const EdgeInsets.only(left:23 ),
-              child: const Text("Email Address",style: TextStyle(fontSize: 16,),),),
 
-             UiHelper.CustomTextField1(EmailText, "youremail@gmail.com",Icons.email, false),
+              UiHelper.label("City"),
+              UiHelper.CustomTextField3(City, "Enter your city", false),
 
-            Container(
-              margin: const EdgeInsets.only(left:23 ),
-              child: const Text("Date of Birth",style: TextStyle(fontSize: 16,),),),
+              UiHelper.label("State"),
+              UiHelper.CustomTextField3(State, "Enter your state", false),
 
-             UiHelper.CustomTextField2(DOB, "DD/MM/YYYY", Icons.calendar_month, Icons.arrow_drop_down, false),
-            Container(
-              margin: const EdgeInsets.only(left:23 ),
-              child: const Text("Birth Place",style: TextStyle(fontSize: 16,),),),
+              UiHelper.label("Address"),
+              UiHelper.CustomTextField3(Address, "Enter your address", false),
 
-             UiHelper.CustomTextField4(BirthPlace, "Select State",Icons.arrow_drop_down , false),
+              UiHelper.label("Pincode"),
+              UiHelper.CustomTextField3(Pincode, "Enter your pincode", false),
+            ]
+            else if (userType == 'Shopkeeper') ...[
+              // Shopkeeper-specific fields
+              UiHelper.label("Shop Name"),
+              UiHelper.CustomTextField3(ShopName, "Enter your shop name", false),
+
+              UiHelper.label("Owner Name"),
+              UiHelper.CustomTextField3(FirstName, "Enter owner’s name", false),
+
+              UiHelper.label("Email Address"),
+              UiHelper.CustomTextField1(EmailText, "youremail@gmail.com", Icons.email, false),
+
+              UiHelper.label("Shop Address"),
+              UiHelper.CustomTextField3(ShopAddress, "Enter shop address", false),
+
+              UiHelper.label("City"),
+              UiHelper.CustomTextField3(ShopCity, "Enter your city", false),
+
+              UiHelper.label("State"),
+              UiHelper.CustomTextField3(ShopState, "Enter your state", false),
+
+              UiHelper.label("Pincode"),
+              UiHelper.CustomTextField3(Pincode, "Enter your pincode", false),
+            ],
 
             Container(
               child: Column(
@@ -210,47 +310,6 @@ class RegisterPageState extends State<RegisterPage>{
                     child: const Text("Whatsapp Number",style: TextStyle(fontSize: 16,),),),
 
                   UiHelper.CustomTextField1(WhatsappNo, "+91", Icons.phone, false),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.only(top:25),
-                            child :Center(
-                              child:Text("Educational Information",style: TextStyle(fontSize: 22,),),)
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left:23,top: 15 ),
-                          child: const Text("College Name",style: TextStyle(fontSize: 16,),),),
-
-                        UiHelper.CustomTextField4(CollegeName, "Enter your college name here", Icons.arrow_drop_down , false),
-
-                        Container(
-                          margin: const EdgeInsets.only(left:23 ),
-                          child: const Text("College’s State",style: TextStyle(fontSize: 16,),),),
-
-                        UiHelper.CustomTextField4(CollegeState, "Select State", Icons.arrow_drop_down , false),
-
-                        Container(
-                          margin: const EdgeInsets.only(left:23,top: 15 ),
-                          child: const Text("Degree",style: TextStyle(fontSize: 16,),),),
-
-                        UiHelper.CustomTextField4(Degree, "Select Course", Icons.arrow_drop_down , false),
-
-                        Container(
-                          margin: const EdgeInsets.only(left:23,top: 15 ),
-                          child: const Text("Branch",style: TextStyle(fontSize: 16,),),),
-
-                        UiHelper.CustomTextField4(Branch, "Select Branch", Icons.arrow_drop_down , false),
-
-                        Container(
-                          margin: const EdgeInsets.only(left:23,top: 15 ),
-                          child: const Text("Passout Year",style: TextStyle(fontSize: 16,),),),
-
-                        UiHelper.CustomTextField4(PassYear, "Select Year", Icons.arrow_drop_down , false),
-                      ],
-                    ),
-                  ),
                   Container(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,7 +381,7 @@ class RegisterPageState extends State<RegisterPage>{
 
 
                             UiHelper.CustomButton((){
-                              Register(FirstName.text.toString(),LastName.text.toString(),Gender.text.toString(),DOB.text.toString(),BirthPlace.text.toString(),PhNo.text.toString(),WhatsappNo.text.toString(),EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString());
+                              Register(FirstName.text.toString(),LastName.text.toString(),Gender.text.toString(),PhNo.text.toString(),WhatsappNo.text.toString(),EmailText.text.toString(),PasswordNum.text.toString(),ConfirmPasswordNum.text.toString(),Pincode.text.toString(),ShopState.text.toString(),ShopName.text.toString(),ShopAddress.text.toString(),ShopCity.text.toString(),ContactNo.text.toString(),City.text.toString(),State.text.toString(),Address.text.toString());
                             }, "Register") ,
                         ]),
                   ),

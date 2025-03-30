@@ -48,27 +48,27 @@ class LoginPageState extends State<LoginPage> {
             body: jsonEncode(data)
         );
         if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
+          var jsonResponse = jsonDecode(response.body);
 
-        // Check if 'status' exists and is a boolean
-        bool status = jsonResponse['status'] ??
-            false; // Default to false if null or missing
+          // Check if 'status' exists and is a boolean
+          bool status = jsonResponse['status'] ??
+              false; // Default to false if null or missing
 
-        if (status) {
-          var myToken = jsonResponse['token'];
-          prefs.setString('token', myToken);
-          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-          sharedPreferences.setString('email', EmailText.text);
-          Navigator.push(
-              context, MaterialPageRoute(
-              builder: (context) => LanguagePage(token: myToken,)));
-          print('login successful');
-        } else {
-          UiHelper.CustomAlertBox(context, "Something went wrong.");
+          if (status) {
+            var myToken = jsonResponse['token'];
+            prefs.setString('token', myToken);
+            final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            sharedPreferences.setString('email', EmailText.text);
+            Navigator.push(
+                context, MaterialPageRoute(
+                builder: (context) => LanguagePage(token: myToken,)));
+            print('login successful');
+          } else {
+            UiHelper.CustomAlertBox(context, "Something went wrong.");
+          }
+        }else {
+          UiHelper.CustomAlertBox(context, "Invalid Email Or Password.");
         }
-      }else {
-    UiHelper.CustomAlertBox(context, "Invalid Email Or Password.");
-    }
       }catch (e) {
         print("Error occurred: $e");
         UiHelper.CustomAlertBox(context, "Server error, try again later.");

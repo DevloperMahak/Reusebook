@@ -82,6 +82,13 @@ class UiHelper{
             )
         ));
   }
+  // Add in UiHelper.dart
+  static Widget label(String text) {
+    return Container(
+      margin: const EdgeInsets.only(left: 23, top: 15),
+      child: Text(text, style: TextStyle(fontSize: 16)),
+    );
+  }
   static CustomButton(VoidCallback voidcallback,String text){
     return Center(
         child:Container(
@@ -107,6 +114,8 @@ class UiHelper{
     });
   }
 }
+
+
 
 /* child: TextField(
                 controller: EmailText,

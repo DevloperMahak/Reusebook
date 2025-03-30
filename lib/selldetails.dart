@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
@@ -242,7 +243,7 @@ class selldetailsState extends State<selldetails>{
     final screenheight=MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Fill Book Details",style: TextStyle(fontSize:25,color: Colors.black),),
+          title: Text('fill_book_details'.tr,style: TextStyle(fontSize:25,color: Colors.black),),
           flexibleSpace:Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
@@ -516,7 +517,7 @@ class selldetailsState extends State<selldetails>{
                                             width: 32,
                                             child: Image.asset(
                                               "assets/images/categories.png",),),),
-                                        Text("categories",
+                                        Text('categories'.tr,
                                             style: TextStyle(fontSize: 12, color: Color(
                                                 0xff3D4652)))
                                       ]),),
@@ -534,7 +535,7 @@ class selldetailsState extends State<selldetails>{
                                             width: 32,
                                             child: Image.asset(
                                               "assets/images/package.png",),)),
-                                        Text("orders",
+                                        Text('orders'.tr,
                                             style: TextStyle(fontSize: 12, color: Color(
                                                 0xff3D4652)))
                                       ]),),
@@ -553,7 +554,7 @@ class selldetailsState extends State<selldetails>{
                                                 backgroundColor: Colors.white,
                                                 child: Icon(Icons.home, size: 32,
                                                     color: Color(0xff3D4652)))),
-                                        Text("Home",
+                                        Text('home'.tr,
                                             style: TextStyle(fontSize: 12, color: Color(
                                                 0xff3D4652)))
                                       ]),),
@@ -571,7 +572,7 @@ class selldetailsState extends State<selldetails>{
                                             width: 32,
                                             child: Image.asset(
                                               "assets/images/merchant.png",),)),
-                                        Text("Shopkeepers",
+                                        Text('shopkeepers'.tr,
                                             style: TextStyle(fontSize: 12, color: Color(
                                                 0xff3D4652)))
                                       ]),),
@@ -591,7 +592,7 @@ class selldetailsState extends State<selldetails>{
                                               width: 32,
                                               child: Image.asset(
                                                 "assets/images/sell.png",),)),
-                                        Text("Sell",
+                                        Text('sell'.tr,
                                             style: TextStyle(fontSize: 12, color: Color(
                                                 0xff3D4652)))
                                       ]),),

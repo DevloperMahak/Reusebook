@@ -1,30 +1,46 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:reusebook/splash_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'controllers/favorites_controller.dart';
 import 'login.dart';
+import 'package:get/get.dart';
+import 'localization_service.dart';
+import 'controllers/cart_controller.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init(); // Add this line
+  Get.put(CartController()); // Register it globally
+  Get.put(FavoritesController()); // add this line
+  // Load saved language from SharedPreferences
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp( MyApp(token: prefs.getString('token'),));
+  Locale savedLocale = await LocalizationService.getSavedLocale();
+  String? token = prefs.getString('token');
+  runApp(MyApp(token: token, initialLocale: savedLocale));
 }
 
 class MyApp extends StatelessWidget {
-
+  final Locale initialLocale;
   final token;
   const MyApp({
-    @required this.token,
+    required this.initialLocale,
+    this.token,
     Key? key,
-}): super(key : key);
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      translations: LocalizationService(),
+      locale: initialLocale,  // Load saved language
+      //fallbackLocale: Locale('en', 'US'),
+      fallbackLocale: LocalizationService.fallbackLocale, // Default fallback
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(255, 240, 146, 6)),

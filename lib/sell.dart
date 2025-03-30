@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:reusebook/selldetails.dart';
 import 'package:reusebook/shopkeeper.dart';
 import 'package:reusebook/uihelper.dart';
@@ -16,7 +17,13 @@ class sellPage extends StatelessWidget {
     final screenheight=MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sell",style: TextStyle(fontSize:25,color: Colors.black),),
+        title: Text('_sell'.tr,style: TextStyle(fontSize:25,color: Colors.black),),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black), // Back arrow icon
+          onPressed: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>homePage()));
+          },
+        ),
         flexibleSpace:Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
@@ -384,7 +391,7 @@ class sellPage extends StatelessWidget {
                                           width: 32,
                                           child: Image.asset(
                                             "assets/images/categories.png",),),),
-                                      Text("categories",
+                                      Text('categories'.tr,
                                           style: TextStyle(fontSize: 12, color: Color(
                                               0xff3D4652)))
                                     ]),),
@@ -402,7 +409,7 @@ class sellPage extends StatelessWidget {
                                           width: 32,
                                           child: Image.asset(
                                             "assets/images/package.png",),)),
-                                      Text("orders",
+                                      Text('orders'.tr,
                                           style: TextStyle(fontSize: 12, color: Color(
                                               0xff3D4652)))
                                     ]),),
@@ -421,7 +428,7 @@ class sellPage extends StatelessWidget {
                                               backgroundColor: Colors.white,
                                               child: Icon(Icons.home, size: 32,
                                                   color: Color(0xff3D4652)))),
-                                      Text("Home",
+                                      Text('home'.tr,
                                           style: TextStyle(fontSize: 12, color: Color(
                                               0xff3D4652)))
                                     ]),),
@@ -439,7 +446,7 @@ class sellPage extends StatelessWidget {
                                           width: 32,
                                           child: Image.asset(
                                             "assets/images/merchant.png",),)),
-                                      Text("Shopkeepers",
+                                      Text('shopkeepers'.tr,
                                           style: TextStyle(fontSize: 12, color: Color(
                                               0xff3D4652)))
                                     ]),),
@@ -459,7 +466,7 @@ class sellPage extends StatelessWidget {
                                             width: 32,
                                             child: Image.asset(
                                               "assets/images/sell.png",),)),
-                                      Text("Sell",
+                                      Text('sell'.tr,
                                           style: TextStyle(fontSize: 12, color: Color(
                                               0xff3D4652)))
                                     ]),),

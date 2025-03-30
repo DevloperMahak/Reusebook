@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:reusebook/categories.dart';
 import 'package:reusebook/mystore.dart';
 import 'package:reusebook/navbar.dart';
@@ -107,14 +108,16 @@ class homePage extends StatelessWidget {
                                           suffixIcon: (Icon(Icons.search,
                                             color: Color(0xff3D4652),
                                             size: 20,)),
-                                          hintText: "What are you looking for ?",
-                                          enabledBorder: OutlineInputBorder(
+                                        hintText: 'what_are_you_looking_for'.tr,
+                                        enabledBorder: OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(30)),
                                               borderSide: BorderSide(
                                                   color: Colors.white
                                               )),
                                           focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(30)),
                                       borderSide: BorderSide(color: Color(0xffFFB330))),
                                       ),
                                     ),
@@ -129,7 +132,7 @@ class homePage extends StatelessWidget {
                                 children: [
                                   Container(
                               margin: EdgeInsets.only(top:20,bottom: 20,left: 20),
-                              child: Text("Books recommended for you",
+                              child: Text('books_recommended_for_you'.tr,
                                 style: TextStyle(fontSize: 24,
                                     fontWeight: FontWeight.w600),),
                             ),
@@ -319,7 +322,7 @@ class homePage extends StatelessWidget {
                             ),
                             Container(
                               margin: EdgeInsets.only(top:20,bottom: 20,left: 20),
-                              child: Text("Trending Books", style: TextStyle(
+                              child: Text('trending_books'.tr, style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.w600),),
                             ),
                             Container(
@@ -508,7 +511,7 @@ class homePage extends StatelessWidget {
                             ),
                             Container(
                               margin: EdgeInsets.only(top:20,bottom: 20,left: 20),
-                              child: Text("Browse categories", style: TextStyle(
+                              child: Text('browse_categories'.tr, style: TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.w600),),
                             ),
                             Container(
@@ -667,7 +670,7 @@ class homePage extends StatelessWidget {
                                     width: 32,
                                     child: Image.asset(
                                       "assets/images/categories.png",),),),
-                                Text("categories",
+                                Text('categories'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -685,7 +688,7 @@ class homePage extends StatelessWidget {
                                     width: 32,
                                     child: Image.asset(
                                       "assets/images/package.png",),)),
-                                Text("orders",
+                                Text('orders'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -704,7 +707,7 @@ class homePage extends StatelessWidget {
                                         backgroundColor: Colors.white,
                                         child: Icon(Icons.home, size: 32,
                                             color: Color(0xff3D4652)))),
-                                Text("Home",
+                                Text('home'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -722,7 +725,7 @@ class homePage extends StatelessWidget {
                                     width: 32,
                                     child: Image.asset(
                                       "assets/images/merchant.png",),)),
-                                Text("Shopkeepers",
+                                Text('shopkeepers'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),
@@ -742,7 +745,7 @@ class homePage extends StatelessWidget {
                                       width: 32,
                                       child: Image.asset(
                                         "assets/images/sell.png",),)),
-                                Text("Sell",
+                                Text('sell'.tr,
                                     style: TextStyle(fontSize: 12, color: Color(
                                         0xff3D4652)))
                               ]),),

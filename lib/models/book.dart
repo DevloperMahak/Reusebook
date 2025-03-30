@@ -7,6 +7,7 @@ class Book {
   String? sellingPrice;
   final double price;
   final String condition;
+  final String imageUrl;
 
   Book({
     required this.bookName,
@@ -17,7 +18,7 @@ class Book {
     required this.sellingPrice,
     required this.price,
     required this.condition,
-
+    required this.imageUrl
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -30,6 +31,7 @@ class Book {
       sellingPrice: json['SellingPrice'] ?? '0.00',
       price: double.tryParse(json['Price']?.toString() ?? '0.0') ?? 0.0,
       condition: json['Condition'] ?? 'Good',
+      imageUrl: json['ImageUrl'] ?? 'https://yourcdn.com/default.jpg',
     );
   }
   Map<String, dynamic> toJson() {
@@ -42,6 +44,7 @@ class Book {
       'SellingPrice': sellingPrice,
       'Price': price,
       'Condition': condition,
+      'ImageUrl': imageUrl,
     };
   }
 }
