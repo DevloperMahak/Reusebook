@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:reusebook/home.dart';
 import 'package:reusebook/newpassword.dart';
 import 'package:reusebook/uihelper.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'localization_service.dart';
 
 class LanguagePage extends StatefulWidget{
   final token;
@@ -13,15 +16,31 @@ class LanguagePage extends StatefulWidget{
 }
 
 class LanguagePageState extends State<LanguagePage> {
-
+  String? selectedLanguage;
+  final List<String> languages = LocalizationService.langs;
   late String EmailText;
+  //final List<String> languages = ['Hindi','Punjabi','Assamese','English','Telugu','Tamil','Bengali','Marathi','Kannada','Odia','Gujrati','Malayalam']; // Sample languages
 
   @override
   void initState() {
     //TODO: implement initState
     super.initState();
+    _loadSelectedLanguage(); //  Load saved language
     Map<String, dynamic>jwtDecodedToken = JwtDecoder.decode(widget.token);
     EmailText = jwtDecodedToken['EmailText'];
+  }
+
+  _loadSelectedLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedLanguage = prefs.getString('selectedLanguage') ?? "English";
+    });
+  }
+
+  _saveLanguage(String language) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLanguage', language);
+    LocalizationService.updateLocale(language); // ✅ Update app locale
   }
 
   @override
@@ -36,8 +55,8 @@ class LanguagePageState extends State<LanguagePage> {
             child: Column(
                 children: [Container(
                     margin: const EdgeInsets.only(top: 80),
-                      child: const Center(
-                        child:Text("Choose Language",style: TextStyle(fontSize: 22,fontWeight:FontWeight.w600),),
+                      child:  Center(
+                        child:Text('language'.tr,style: TextStyle(fontSize: 22,fontWeight:FontWeight.w600),),
                       )),
                   Container(
                     height: 350,
@@ -89,24 +108,55 @@ class LanguagePageState extends State<LanguagePage> {
                           margin: const EdgeInsets.only(top: 5),
                           height: 48,
                           width: 366,
-                          child: const TextField(
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.language_rounded,color: Color(0xffFFB330),size: 20,),
-                                  suffixIcon: Icon(Icons.arrow_drop_down,color: Color(0xff1C1B1F),size: 20,),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Color(0xffFFB330))),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Color(0xffFFB330))),
-                                  hintText: "Select language"
-                              )),
-                        )),
+                          child: DropdownButtonFormField<String>(
+    value: selectedLanguage,
+    decoration: const InputDecoration(
+    prefixIcon: Icon(Icons.language_rounded, color: Color(0xffFFB330), size: 20),
+    border: InputBorder.none,
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xffFFB330))),
+      focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xffFFB330))),// Removes default border
+    ),
+    hint: const Text("Select language"),
+    items: languages.map((String language) {
+    return DropdownMenuItem<String>(
+    value: language,
+    child: Text(language),
+    );
+    }).toList(),
+    onChanged: (String? newValue) async{
+      if (newValue != null) {
+        setState(() {
+          selectedLanguage = newValue;
+        });
+        // ✅ Update app language dynamically
+        await LocalizationService.updateLocale(newValue);
+        await _saveLanguage(newValue); // Update selected language
 
-                        UiHelper.CustomButton((){Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => homePage()));}, "Confirm") ,
+        // Optional but helps debug
+        print("Language updated to: $newValue");
+    };
+    },
+    ),
+    )),
+
+                        UiHelper.CustomButton(()async{
+    if (selectedLanguage != null) {
+      await LocalizationService.updateLocale(selectedLanguage!); // Ensure it's set again
+                          Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => homePage()),
+                          );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select a language")),
+      );
+    }
+    }, "Confirm") ,
                       ]
                     )
-                  ))
+                  )
+                  )
                   )
             ])
     );
