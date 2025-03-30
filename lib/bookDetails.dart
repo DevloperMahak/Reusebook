@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
 
 import 'categories.dart';
+import 'controllers/cart_controller.dart';
 import 'home.dart';
 import 'myStore.dart';
+import 'models/book.dart';
 import 'orders.dart';
+
 
 class bookDetailsPage extends StatefulWidget {
 
-  const bookDetailsPage({super.key});
+  final Book book;
+
+  const bookDetailsPage({super.key, required this.book});
+
   @override
   State<bookDetailsPage>createState()=>bookDetailsPageState();
 }
@@ -96,29 +104,29 @@ class bookDetailsPageState extends State<bookDetailsPage> {
           right: 50,
           child:Icon(Icons.share,size: 30,color: Color(0xff3D4652)))
     ]),
-          Text(
-            "Differential Calculus For Jee Main And Advanced",textAlign: TextAlign.center, // Display the book name
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-          ),
+      // ✅ Your text widgets
       Text(
-        "Author : By Amit M Aggarwal",textAlign: TextAlign.center, // Display the book name
+        widget.book.bookName,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+      ),
+      SizedBox(height: 10),
+      Text(
+        "Author : By ${widget.book.author}",
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       ),
       Text(
-        "Publication : By Arhihant Publication",textAlign: TextAlign.center, // Display the book name
+        "Publication : By ${widget.book.publication}",
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       ),
-      Container(
-          margin: const EdgeInsets.only(top: 20,left: 20),
-    child: Text(
-        "MRP 202",textAlign: TextAlign.start,// Display the book price
+      Text(
+        "MRP ₹${widget.book.sellingPrice}",
         style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-      )),
-      Container(
-          child: Text(
-            "Book Condition : Medium",textAlign: TextAlign.start,// Display the book price
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-          )),
+      ),
+      Text(
+        "Book Condition : ${widget.book.condition}",
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+      ),
       Container(
         margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -296,6 +304,17 @@ class bookDetailsPageState extends State<bookDetailsPage> {
                                         )
                                     ),
                                     onPressed: () {
+                                      final cartController = Get.find<CartController>();
+                                      cartController.addToCart(widget.book);
+
+                                      Get.snackbar(
+                                        "Success",
+                                        "${widget.book.bookName} added to cart!",
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Color(0xffFFD77F),
+                                        colorText: Colors.black,
+                                      );
+
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(builder: (context)=>storePage(),
