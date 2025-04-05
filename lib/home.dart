@@ -9,10 +9,43 @@ import 'package:reusebook/sell.dart';
 import 'package:reusebook/shopkeeper.dart';
 import 'package:reusebook/splash_screen.dart';
 
+
+
 import 'favourites.dart';
 import 'notifications.dart';
+class homePage extends StatefulWidget {
+  const homePage({super.key});
+  @override
+  State<homePage>createState()=>homePageState();
+}
+class homePageState extends State<homePage> {
+  final TextEditingController _searchController = TextEditingController();
+  //late stt.SpeechToText _speech;
+  bool _isListening = false;
 
-class homePage extends StatelessWidget {
+  /*@override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+  void _startListening() async {
+    bool available = await _speech.initialize();
+    if (available) {
+      setState(() => _isListening = true);
+      _speech.listen(
+        onResult: (result) {
+          setState(() {
+            _searchController.text = result.recognizedWords;
+          });
+        },
+      );
+    }
+  }
+
+  void _stopListening() {
+    setState(() => _isListening = false);
+    _speech.stop();
+  }*/
   @override
   Widget build(BuildContext context) {
     final screenwidth=MediaQuery.of(context).size.width;
@@ -105,9 +138,20 @@ class homePage extends StatelessWidget {
                                     ),
                                     child: TextField(
                                       decoration: InputDecoration(
-                                          suffixIcon: (Icon(Icons.search,
-                                            color: Color(0xff3D4652),
-                                            size: 20,)),
+                                        prefixIcon: Icon(Icons.search, color: Color(0xff3D4652), size: 20),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            _isListening ? Icons.mic : Icons.mic_none,
+                                            color: _isListening ? Colors.red : Color(0xff3D4652),
+                                          ),
+                                          onPressed: () {
+                                           /* if (_isListening) {
+                                              _stopListening();
+                                            } else {
+                                              _startListening();
+                                            }*/
+                                          },
+                                        ),
                                         hintText: 'what_are_you_looking_for'.tr,
                                         enabledBorder: OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
