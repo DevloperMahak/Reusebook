@@ -70,7 +70,9 @@ class shopkeeperPageState extends State<shopkeeperPage> {
         ),
       ),
       body: SafeArea(
-    child: Column(
+    child: Stack(
+        children: [
+          Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -175,8 +177,10 @@ class shopkeeperPageState extends State<shopkeeperPage> {
     },
     ),
             ),
-            Positioned(
-                bottom: 0,
+          ],
+          ),
+            Align(
+                alignment: Alignment.bottomCenter,
                 child: Container(
                     height: 75,
                     width: screenwidth,
