@@ -1,4 +1,4 @@
-final url = 'http://192.168.236.59:5000/';
+final url = 'http://192.168.58.59:5000/';
 final registration = url + "registration";
 final login = url + "login";
 final postbookdetails = url + "postBook";
