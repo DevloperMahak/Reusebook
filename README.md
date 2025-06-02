@@ -113,19 +113,19 @@ The backend will run on: http://localhost:5000
 
 ### 📱 3. Frontend Setup (Flutter)
 
-➤ Prerequisites
+➤ **Prerequisites**
 
 - Flutter SDK
 - An emulator or physical device
 
-➤ Installation
+➤ **Installation**
 
 ```bash
 cd frontend
 flutter pub get
 ```
 
-➤ API Configuration
+➤ **API Configuration**
 Update the API base URL in your Flutter app (usually inside a constants or API service file) to match the backend server:
 
 ```bash
