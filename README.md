@@ -125,7 +125,8 @@ cd frontend
 flutter pub get
 ```
 
-➤ **API Configuration**
+## ➤ API Configuration
+
 Update the API base URL in your Flutter app (usually inside a constants or API service file) to match the backend server:
 
 ```bash
