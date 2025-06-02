@@ -81,9 +81,9 @@ cd ReuseBook
 ### 🖥️ 2. Backend Setup (Node.js + MongoDB)
 
 ➤ Prerequisites
-Node.js
 
-MongoDB (local or MongoDB Atlas)
+- Node.js
+- MongoDB (local or MongoDB Atlas)
 
 ➤ Installation
 
@@ -114,9 +114,9 @@ The backend will run on: http://localhost:5000
 ### 📱 3. Frontend Setup (Flutter)
 
 ➤ Prerequisites
-Flutter SDK
 
-An emulator or physical device
+- Flutter SDK
+- An emulator or physical device
 
 ➤ Installation
 
