@@ -76,14 +76,70 @@ Follow these steps to set up and run the **ReuseBook** project locally.
 ```bash
 git clone https://github.com/DevloperMahak/ReuseBook.git
 cd ReuseBook
+```
 
- 🖥️ 2. Backend Setup
+### 🖥️ 2. Backend Setup (Node.js + MongoDB)
+
 ➤ Prerequisites
 Node.js
 
 MongoDB (local or MongoDB Atlas)
 
 ➤ Installation
+
+```bash
 cd backend
 npm install
 ```
+
+➤ Environment Configuration
+Create a .env file in the backend/ folder and add the following:
+
+```bash
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+```
+
+Replace your_mongodb_connection_string with your MongoDB URI (local or Atlas).
+
+➤ Run the Backend Server
+
+```bash
+cd src
+node index.js
+```
+
+The backend will run on: http://localhost:5000
+
+### 📱 3. Frontend Setup (Flutter)
+
+➤ Prerequisites
+Flutter SDK
+
+An emulator or physical device
+
+➤ Installation
+
+```bash
+cd frontend
+flutter pub get
+```
+
+➤ API Configuration
+Update the API base URL in your Flutter app (usually inside a constants or API service file) to match the backend server:
+
+```bash
+const String baseUrl = 'http://10.0.2.2:5000'; // For Android emulator
+// OR
+const String baseUrl = 'http://localhost:5000'; // For iOS or web
+```
+
+Note: For physical device testing, use your computer’s local IP (e.g., 192.168.x.x).
+
+➤ Run the App
+
+```bash
+flutter run
+```
+
+The app should launch on your device or emulator and connect to the running backend.
