@@ -65,4 +65,25 @@ Benefits
 
 ---
 
-##
+## 🚀 Getting Started
+
+Follow these steps to set up and run the **ReuseBook** project locally.
+
+---
+
+### 📁 1. Clone the Repository
+
+```bash
+git clone https://github.com/DevloperMahak/ReuseBook.git
+cd ReuseBook
+
+ 🖥️ 2. Backend Setup
+➤ Prerequisites
+Node.js
+
+MongoDB (local or MongoDB Atlas)
+
+➤ Installation
+cd backend
+npm install
+```
