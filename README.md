@@ -80,19 +80,19 @@ cd ReuseBook
 
 ### 🖥️ 2. Backend Setup (Node.js + MongoDB)
 
-➤ Prerequisites
+➤ **Prerequisites**
 
 - Node.js
 - MongoDB (local or MongoDB Atlas)
 
-➤ Installation
+➤ **Installation**
 
 ```bash
 cd backend
 npm install
 ```
 
-➤ Environment Configuration
+➤ **Environment Configuration**
 Create a .env file in the backend/ folder and add the following:
 
 ```bash
@@ -102,7 +102,7 @@ MONGO_URI=your_mongodb_connection_string
 
 Replace your_mongodb_connection_string with your MongoDB URI (local or Atlas).
 
-➤ Run the Backend Server
+➤ **Run the Backend Server**
 
 ```bash
 cd src
@@ -125,8 +125,7 @@ cd frontend
 flutter pub get
 ```
 
-## ➤ API Configuration
-
+➤ **API Configuration** <br>
 Update the API base URL in your Flutter app (usually inside a constants or API service file) to match the backend server:
 
 ```bash
