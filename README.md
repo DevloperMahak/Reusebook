@@ -1,6 +1,25 @@
 # Reusebook
 
+**♻️ REUSEBOOK — GIVE OLD BOOKS A NEW PURPOSE!"**
+
 \*REUSE BOOK 📚 Reuse Book is interactive platform for connecting two users (specially for students) for selling and purchasing old books.It is very useful for one who want to buy books at low prices and one who want to sell their old books at half prices .The old books shopkeeper also include in this app.
+
+---
+
+## 🎯 Objective
+
+**🧠Problem:** Students buy expensive textbooks each semester and leave them unused once exams are over. These books often end up gathering dust or being thrown away — wasting money, space, and resources.
+
+**💡Solution:**
+ReuseBook is a platform that connects students and local bookshop owners, allowing them to buy, sell, or donate second-hand academic books. It promotes affordability, sustainability, and a circular economy in education.
+
+Why Now?
+
+- The demand for low-cost education is rising
+
+- Conscious consumers are seeking eco-friendly alternatives
+
+- Local vendors lack digital visibility
 
 ---
 
