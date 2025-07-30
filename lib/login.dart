@@ -54,11 +54,22 @@ class LoginPageState extends State<LoginPage> {
           bool status = jsonResponse['status'] ??
               false; // Default to false if null or missing
 
+          print("Login Response: ${response.body}");
+
+
           if (status) {
             var myToken = jsonResponse['token'];
-            prefs.setString('token', myToken);
+
+            String token = jsonResponse['token'];
+            String userId = jsonResponse['userId']; // ✅ From backend
+
             final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            sharedPreferences.setString('token', token);
+            sharedPreferences.setString('userId', userId);
             sharedPreferences.setString('email', EmailText.text);
+
+            prefs.setString('token', myToken);
+
             Navigator.push(
                 context, MaterialPageRoute(
                 builder: (context) => LanguagePage(token: myToken,)));
