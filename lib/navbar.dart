@@ -7,7 +7,7 @@ import 'package:reusebook/login.dart';
 import 'package:reusebook/splash_screen.dart';
 import 'package:reusebook/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'image_service.dart';
+import '../services/image_service.dart'; // adjust path as needed
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -31,16 +31,26 @@ class NavbarState extends State<Navbar> {
 
   Future<void> _loadProfileImage() async {
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId'); // Make sure this key matches the one you're saving in login
-    if (userId != null) {
-      final imageUrl = await _imageService.getImageUrl(userId);
-      if (imageUrl != null) {
-        setState(() {
-          _networkImageUrl = imageUrl;
-        });
+    final savedUrl = prefs.getString('profileImageUrl');
+
+    if (savedUrl != null) {
+      setState(() {
+        _networkImageUrl = savedUrl;
+      });
+    } else {
+      final userId = prefs.getString('userId');
+      if (userId != null) {
+        final imageUrl = await _imageService.getImageUrl(userId);
+        if (imageUrl != null) {
+          await prefs.setString('profileImageUrl', imageUrl);
+          setState(() {
+            _networkImageUrl = imageUrl;
+          });
+        }
       }
     }
   }
+
 
   Future<void> getGalleryImage() async {
     final pickedFile = await picker1.pickImage(source: ImageSource.gallery, imageQuality: 80);
@@ -51,11 +61,12 @@ class NavbarState extends State<Navbar> {
         _profileImage = File(pickedFile.path); // show preview immediately
       });
       if (userId != null) {
-        await _imageService.uploadProfileImage(File(pickedFile.path), userId); // assuming you have this
-        final imageUrl = await _imageService.getImageUrl(userId);
+        final uploadedUrl = await _imageService.uploadProfileImage(File(pickedFile.path), userId);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('profileImageUrl', uploadedUrl);
         setState(() {
-          _networkImageUrl = imageUrl;
-          _profileImage = null; // clear temporary image
+          _networkImageUrl = uploadedUrl;
+          _profileImage = null; // remove temp image after server confirms
         });
       }
     } else {
@@ -74,10 +85,11 @@ class NavbarState extends State<Navbar> {
         final prefs = await SharedPreferences.getInstance();
         final userId = prefs.getString('userId');
         if (userId != null) {
-          await _imageService.uploadProfileImage(File(pickedFile.path), userId);
-          final imageUrl = await _imageService.getImageUrl(userId);
+          final uploadedUrl = await _imageService.uploadProfileImage(File(pickedFile.path), userId);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('profileImageUrl', uploadedUrl);
           setState(() {
-            _networkImageUrl = imageUrl;
+            _networkImageUrl = uploadedUrl;
             _profileImage = null; // remove temp image after server confirms
           });
         }
@@ -180,11 +192,15 @@ class NavbarState extends State<Navbar> {
               final prefs = await SharedPreferences.getInstance();
               final userId = prefs.getString('userId');
               if (userId != null) {
-                bool deleted = await _imageService.deleteImage(userId);
+                bool deleted = await _imageService.deleteProfileImage(userId);
                 if (deleted) {
+                  await prefs.remove('profileImageUrl');
                   setState(() {
                     _profileImage = null;
+                    _networkImageUrl = null;
                   });
+                }else {
+    print("Failed to delete from server");
                 }
               } // Add your remove logic here
               Navigator.pop(context);
