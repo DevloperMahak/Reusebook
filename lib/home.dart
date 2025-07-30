@@ -166,9 +166,7 @@ class homePageState extends State<homePage> {
                                       ),
                                     ),
                                   )
-
                                 ],
-
                               ),
                             ),
                             Column(
