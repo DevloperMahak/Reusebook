@@ -1,4 +1,4 @@
-final url = 'http://192.168.58.59:5000/';
+final url = 'https://reusebook-backend.onrender.com';
 final registration = url + "registration";
 final login = url + "login";
 final postbookdetails = url + "postBook";
@@ -8,6 +8,6 @@ final verifyOTP = url + "confirmOTP";
 final checkLogin = url + "check-login";
 final frontcover = url + "image1upload";
 final profileImage = url + "upload-profile-image";
-final getImage = url + "getImageByUserId";
+final getImage = url + "/image/:userId";
 final deleteprofileImage = url + "deleteImage";
 final allShopkeepers = url + "shopkeepers";
