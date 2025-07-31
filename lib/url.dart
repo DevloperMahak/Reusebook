@@ -1,4 +1,4 @@
-final url = 'https://reusebook-backend.onrender.com';
+final url = 'https://reusebook-backend.onrender.com/';
 final registration = url + "registration";
 final login = url + "login";
 final postbookdetails = url + "postBook";
