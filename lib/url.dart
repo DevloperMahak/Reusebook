@@ -1,4 +1,4 @@
-const baseUrl = 'https://reusebook-backend.onrender.com/';
+const baseUrl = 'https://reusebook-backend.onrender.com';
 final registration = '$baseUrl/registration';
 final login = '$baseUrl/login';
 final postbookdetails = '$baseUrl/postBook';
